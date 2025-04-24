@@ -71,62 +71,53 @@
                   <h4>General</h4>
                   <ul class="list-unstyled components">
 
-                     <li>
-                        <a href="#gestionDepenses" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                           <i class="fa fa-wallet purple_color"></i>
-                          <span>Gestion des dépenses</span>
-                        </a>
-                        <ul class="collapse list-unstyled" id="gestionDepenses">
-                          <li><a href="{{ route('listeDepense') }}"><span>Dépenses</span></a></li>
-                          {{-- <li><a href="#"><span>Supprimer</span></a></li>
-                          <li><a href="#"><span>Historique de suppression</span></a></li>
-                          <li><a href="#"><span>Voir les depenses</span></a></li> --}}
-                        </ul>
-                      </li>
-                    
-                    </li>
-                     <li>
-                        <a href="#recettesMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle d-flex align-items-center">
-                           <i class="fa fa-money-bill-wave purple_color me-2"></i>
-                            <span>Gestion des recettes</span>
-                        </a>
-                        <ul class="collapse list-unstyled" id="recettesMenu">
-                            <li><a href="{{ route('listeRecette') }}">> <span>recettes</span></a></li>
-                            {{-- <li><a href="media_gallery.html">> <span>Supprimer</span></a></li>
-                            <li><a href="icons.html">> <span>Historique de suppression</span></a></li>
-                            <li><a href="icons.html">> <span>Voir les recettes</span></a></li> --}}
-                        </ul>
-                    </li>
-                    
-                     <li>
-                        <a href="#apps" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-object-group blue2_color"></i> <span>Notification</span></a>
-                        <ul class="collapse list-unstyled" id="apps">
-                           <li><a href="email.html">> <span>Email</span></a></li>
-                           <li><a href="calendar.html">> <span>Calendar</span></a></li>
-                           <li><a href="media_gallery.html">> <span>Media Gallery</span></a></li>
-                        </ul>
-                     </li>
-                     <li>
-                        <a href="contact.html">
-                        <i class="fa fa-paper-plane red_color"></i> <span>Contact</span></a>
-                     </li>
-                     <li class="active">
-                        <a href="#additional_page" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-clone yellow_color"></i> <span>Profil</span></a>
-                        <ul class="collapse list-unstyled" id="additional_page">
-                           <li>
-                              <a href="#">> <span>Profile</span></a>
-                           </li>
-                           <li>
-                              <a href="#">> <span>Projects</span></a>
-                           </li>
-                           <li>
-                              <a href="#">> <span>Login</span></a>
-                           </li>
-                           <li>
-                              <a href="#">> <span>404 Error</span></a>
-                           </li>
-                        </ul>
-                     </li>
+                     <!-- 🔷 Gestion des Dépenses -->
+          <!-- 🔷 Gestion des Dépenses -->
+<li>
+   <a href="{{ route('listeDepense') }}">
+       <i class="fa fa-wallet purple_color"></i> <span>Gestion des Dépenses</span>
+   </a>
+</li>
+
+<!-- 🔷 Gestion des Recettes -->
+<li>
+   <a href="{{ route('listeRecette') }}">
+       <i class="fa fa-money-bill-wave purple_color me-2"></i> <span>Gestion des Recettes</span>
+   </a>
+</li>
+
+                       <!-- 🔷 Menu Rapport Financier -->
+<li>
+   <a href="{{ route('rapport.pdf') }}">
+       <i class="fa fa-bar-chart text-success"></i> Rapport Financier
+   </a>
+</li>
+
+<!-- 🔷 Menu Rapport de Littérature -->
+<li>
+   <a href="{{ route('rapport.litterature.pdf') }}">
+       <i class="fa fa-book text-primary"></i> Rapport de Littérature
+   </a>
+</li>
+
+{{-- <!-- 📩 Menu Contact -->
+<li>
+   <a href="contact.html">
+       <i class="fa fa-paper-plane red_color"></i> <span>Contact</span>
+   </a>
+</li>
+
+<!-- 👤 Menu Profil -->
+<li>
+   <a href="#additional_page" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+       <i class="fa fa-user-circle yellow_color"></i> <span>Profil</span>
+       <i class="fa fa-chevron-down float-right"></i>
+   </a>
+   <ul class="collapse list-unstyled" id="additional_page">
+       <!-- autres sous-liens si nécessaire -->
+   </ul>
+</li> --}}
+
                      <li><a href="{{ route('visualisation') }}"><i class="fa fa-bar-chart-o green_color"></i> <span>visualisation </span></a></li>
                      <li>
                         @auth

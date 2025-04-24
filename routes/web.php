@@ -11,6 +11,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\VisualisationController;
 
+use App\Http\Controllers\RapportController;
+
 // Page d’accueil
 Route::get('/', function () {
     return view('welcome');
@@ -77,6 +79,12 @@ Route::put('/depenses/{id}/archiver', [DepenseController::class, 'archiver'])->n
 Route::middleware('auth')->group(function () {
     Route::get('/visualisation', [VisualisationController::class, 'visualiser'])->name('visualisation');
 });
+
+
+Route::get('/rapport/pdf', [RapportController::class, 'generer'])->name('rapport.pdf');
+
+Route::get('/rapport-litterature-pdf', [App\Http\Controllers\RapportController::class, 'literaturePDF'])->name('rapport.litterature.pdf');
+
 
 // Routes Breeze pour l'authentification
 require __DIR__.'/auth.php';
