@@ -43,6 +43,13 @@
             background-color: #fff9c4;
             font-weight: bold;
         }
+        .advice {
+            margin-top: 30px;
+            background-color: #ffeb3b;
+            padding: 15px;
+            border: 1px solid #ff9800;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -134,5 +141,18 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Conseils Financiers -->
+    <div class="advice">
+        <h3>Conseils Financiers</h3>
+        @if($totalRecettes > $totalDepenses)
+            <p>Félicitations, votre entreprise est bénéficiaire cette période ! Il est conseillé de mettre une partie de votre excédent en réserve pour les périodes creuses. Vous pouvez aussi investir dans des projets qui génèrent des revenus supplémentaires.</p>
+        @elseif($totalRecettes < $totalDepenses)
+            <p>Attention, votre entreprise est en déficit cette période. Il serait sage de revoir vos dépenses, peut-être de négocier avec vos fournisseurs ou d'optimiser certains coûts. Envisagez également de diversifier vos sources de revenus.</p>
+        @else
+            <p>Votre entreprise est en équilibre cette période. C'est un bon point, mais il serait prudent de continuer à chercher des opportunités pour améliorer vos revenus tout en maintenant vos dépenses sous contrôle.</p>
+        @endif
+    </div>
+
 </body>
 </html>
