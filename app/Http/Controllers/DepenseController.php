@@ -104,7 +104,7 @@ class DepenseController extends Controller
         $depense->archiver = true;
         $depense->save();
 
-        return redirect()->route('depenses.index')->with('success', 'Dépense archivée avec succès.');
+        return redirect()->route('depenses.index')->with('success', 'Dépense archiviée avec succès.');
     }
 
     // Afficher les détails d'une dépense

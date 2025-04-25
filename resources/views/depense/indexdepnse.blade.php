@@ -86,155 +86,145 @@
             </div>
         </div>
 
-        <!-- Affichage des résultats de filtrage -->
-        <div id="resultatsFiltrage" class="mt-4">
-            <!-- Les résultats AJAX seront injectés ici -->
-        </div>
-    </div>
-
-    <!-- MODAL FILTRE -->
-    <div class="modal fade" id="filtreModal" tabindex="-1" aria-labelledby="filtreModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form id="filtreForm">
-                @csrf
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Filtrer les Dépenses</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-4">
-                                <select name="filter" class="form-select" required>
-                                    <option value="jour">Jour</option>
-                                    <option value="semaine">Semaine</option>
-                                    <option value="mois">Mois</option>
-                                    <option value="annee">Année</option>
+        <!-- MODAL AJOUT DÉPENSE -->
+        <div class="modal fade" id="ajouterDepenseModal" tabindex="-1" aria-labelledby="ajouterDepenseModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form method="POST" action="{{ route('depenses.store') }}">
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter une Dépense</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label>Description</label>
+                                <input type="text" name="description" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label>Objet</label>
+                                <input type="text" name="objet" class="form-control" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Montant (FCFA)</label>
+                                    <input type="number" step="0.01" name="montant" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Téléphone</label>
+                                    <input type="text" name="telephone" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label>Catégorie</label>
+                                <select name="categorie_id" class="form-select" required>
+                                    <option>Choisissez une catégorie :</option>
+                                    @foreach($categories as $categorie)
+                                        <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                                    @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <label for="date_debut">Date Début</label>
-                                <input type="date" name="date_debut" id="date_debut" class="form-control" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="date_fin">Date Fin</label>
-                                <input type="date" name="date_fin" id="date_fin" class="form-control" required>
-                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="fas fa-search me-1"></i> Rechercher
-                                </button>
-                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-success">Enregistrer</button>
                         </div>
-                        <!-- Résultats filtrés affichés ici -->
-                        <div id="resultatsFiltrageModal" class="mt-4"></div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- MODAL AJOUT DÉPENSE -->
-    <div class="modal fade" id="ajouterDepenseModal" tabindex="-1" aria-labelledby="ajouterDepenseModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form method="POST" action="{{ route('depenses.store') }}">
-                @csrf
+        <!-- MODAL FILTRE -->
+        <div class="modal fade" id="filtreModal" tabindex="-1" aria-labelledby="filtreModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <form id="filtreForm">
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Filtrer les Dépenses</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <select name="filter" class="form-select" required>
+                                        <option value="jour">Jour</option>
+                                        <option value="semaine">Semaine</option>
+                                        <option value="mois">Mois</option>
+                                        <option value="annee">Année</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="date_debut">Date Début</label>
+                                    <input type="date" name="date_debut" id="date_debut" class="form-control" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="date_fin">Date Fin</label>
+                                    <input type="date" name="date_fin" id="date_fin" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-1"></i> Rechercher
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="resultatsFiltrageModal" class="mt-4"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODAL DESCRIPTION -->
+        <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Ajouter une Dépense</h5>
+                        <h5 class="modal-title">Description de la Dépense</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label>Description</label>
-                            <input type="text" name="description" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label>Objet</label>
-                            <input type="text" name="objet" class="form-control" required>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label>Montant (FCFA)</label>
-                                <input type="number" step="0.01" name="montant" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label>Téléphone</label>
-                                <input type="text" name="telephone" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label>Catégorie</label>
-                            <select name="categorie_id" class="form-select" required>
-                                <option>Choisissez une catégorie :</option>
-                                @foreach($categories as $categorie)
-                                    <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <p id="descriptionText" style="max-height: 200px; overflow-y: auto;"></p> <!-- Limiter la hauteur -->
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-success">Enregistrer</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL DESCRIPTION -->
-    <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="descriptionModalLabel">Description de la Dépense</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                </div>
-                <div class="modal-body">
-                    <p id="descriptionText"></p> <!-- Description de la dépense affichée ici -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <script>
-        // Filtrage des dépenses via AJAX
-        $('#filtreForm').on('submit', function(e) {
-            e.preventDefault();
-            let formData = $(this).serialize();
+        <script>
+            // Gestion du formulaire de filtrage
+            $('#filtreForm').on('submit', function(e) {
+                e.preventDefault();
 
-            $.ajax({
-                url: "{{ route('depenses.filtrer') }}",
-                method: "GET",
-                data: formData,
-                success: function(response) {
-                    $('#resultatsFiltrageModal').html(response);
-                    $('#filtreModal').modal('show');
-                },
-                error: function(xhr) {
-                    $('#resultatsFiltrageModal').html('<div class="alert alert-danger">Une erreur est survenue.</div>');
-                    console.error(xhr.responseText);
-                }
+                let formData = $(this).serialize();
+
+                $.ajax({
+                    url: "{{ route('depenses.filtrer') }}",
+                    method: "GET",
+                    data: formData,
+                    success: function(response) {
+                        $('#resultatsFiltrageModal').html(response);
+                    },
+                    error: function(xhr) {
+                        $('#resultatsFiltrageModal').html('<div class="alert alert-danger">Une erreur est survenue.</div>');
+                    }
+                });
             });
-        });
 
-        // Injecter la description dans la modale
-        $('#descriptionModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var description = button.data('description');
-            var modal = $(this);
-            modal.find('#descriptionText').text(description);
-        });
-    </script>
+            // Injection de la description dans le modal
+            $('#descriptionModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var description = button.data('description');
+                var modal = $(this);
+                modal.find('#descriptionText').text(description);
+            });
+        </script>
+    </div>
 </body>
 
 </html>
