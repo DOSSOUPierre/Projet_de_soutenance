@@ -31,7 +31,11 @@
                 @forelse ($recettes as $recette)
                 <tr>
                     <td>{{ $recette->id }}</td>
-                    <td>{{ $recette->description }}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#descriptionModal" data-description="{{ $recette->description }}">
+                            <i class="fas fa-eye"></i> Voir la description
+                        </button>
+                    </td>
                     <td>{{ $recette->objet }}</td>
                     <td>{{ $recette->montant }} FCFA</td>
                     <td>{{ $recette->categorie->nom }}</td>

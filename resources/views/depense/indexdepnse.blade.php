@@ -55,7 +55,11 @@
                         @foreach($depenses as $index => $depense)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $depense->description }}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#descriptionModal" data-description="{{ $depense->description }}">
+                                    <i class="fas fa-eye"></i> Voir la description
+                                </button>
+                            </td>
                             <td>{{ $depense->objet }}</td>
                             <td class="text-success fw-bold">{{ number_format($depense->montant, 2) }} FCFA</td>
                             <td>{{ $depense->telephone }}</td>
@@ -75,12 +79,16 @@
                                     </form>
                                 </div>
                             </td>
-                                                        
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
+        </div>
+
+        <!-- Affichage des résultats de filtrage -->
+        <div id="resultatsFiltrage" class="mt-4">
+            <!-- Les résultats AJAX seront injectés ici -->
         </div>
     </div>
 
@@ -105,17 +113,23 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <input type="date" name="date" class="form-control" required>
+                                <label for="date_debut">Date Début</label>
+                                <input type="date" name="date_debut" id="date_debut" class="form-control" required>
                             </div>
                             <div class="col-md-4">
+                                <label for="date_fin">Date Fin</label>
+                                <input type="date" name="date_fin" id="date_fin" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <button type="submit" class="btn btn-primary w-100">
                                     <i class="fas fa-search me-1"></i> Rechercher
                                 </button>
                             </div>
                         </div>
-                        <div id="resultatsFiltrage">
-                            <!-- Les résultats AJAX seront injectés ici -->
-                        </div>
+                        <!-- Résultats filtrés affichés ici -->
+                        <div id="resultatsFiltrageModal" class="mt-4"></div>
                     </div>
                 </div>
             </form>
@@ -163,10 +177,28 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="submit" class="btn btn-success">Enregistrer</button>
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL DESCRIPTION -->
+    <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="descriptionModalLabel">Description de la Dépense</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="descriptionText"></p> <!-- Description de la dépense affichée ici -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -175,24 +207,33 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script>
+        // Filtrage des dépenses via AJAX
         $('#filtreForm').on('submit', function(e) {
-    e.preventDefault();
-    let formData = $(this).serialize();
+            e.preventDefault();
+            let formData = $(this).serialize();
 
-    $.ajax({
-        url: "{{ route('depenses.filtrer') }}",
-        method: "GET",
-        data: formData,
-        success: function(response) {
-            $('#resultatsFiltrage').html(response);
-        },
-        error: function(xhr) {
-            $('#resultatsFiltrage').html('<div class="alert alert-danger">Une erreur est survenue.</div>');
-            console.error(xhr.responseText); // <-- Pour afficher l’erreur en console
-        }
-    });
-});
+            $.ajax({
+                url: "{{ route('depenses.filtrer') }}",
+                method: "GET",
+                data: formData,
+                success: function(response) {
+                    $('#resultatsFiltrageModal').html(response);
+                    $('#filtreModal').modal('show');
+                },
+                error: function(xhr) {
+                    $('#resultatsFiltrageModal').html('<div class="alert alert-danger">Une erreur est survenue.</div>');
+                    console.error(xhr.responseText);
+                }
+            });
+        });
 
+        // Injecter la description dans la modale
+        $('#descriptionModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var description = button.data('description');
+            var modal = $(this);
+            modal.find('#descriptionText').text(description);
+        });
     </script>
 </body>
 

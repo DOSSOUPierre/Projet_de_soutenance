@@ -31,7 +31,11 @@
                 @forelse ($depenses as $depense)
                 <tr>
                     <td>{{ $depense->id }}</td>
-                    <td>{{ $depense->description }}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#descriptionModal" data-description="{{ $depense->description }}">
+                            <i class="fas fa-eye"></i> Voir la description
+                        </button>
+                    </td>
                     <td>{{ $depense->objet }}</td>
                     <td>{{ $depense->montant }} FCFA</td>
                     <td>{{ $depense->categorie->nom }}</td>
@@ -58,6 +62,31 @@
         </table>
     </div>
 
+    <!-- Modal for description -->
+    <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="descriptionModalLabel">Description de la dépense</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modal-description"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Script to pass the description to the modal
+        var descriptionModal = document.getElementById('descriptionModal');
+        descriptionModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Button that triggered the modal
+            var description = button.getAttribute('data-description'); // Extract info from data-* attributes
+            var modalBody = descriptionModal.querySelector('.modal-body p');
+            modalBody.textContent = description; // Update the modal content
+        });
+    </script>
 </body>
 </html>

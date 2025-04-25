@@ -7,37 +7,35 @@ use App\Models\Categorie;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Carbon\CarbonInterface; // Ajouté pour l'utilisation des constantes de l'interface
+use Carbon\CarbonInterface;
 use App\Notifications\DepenseEnregistreeNotification;
 
 class DepenseController extends Controller
 {
-    // Affiche les dépenses non archivées
+    // Afficher la liste des dépenses
     public function index()
     {
         $depenses = Depense::with('categorie')->where('archiver', false)->get();
         $categories = Categorie::all();
-        
+
         return view('depense.indexdepnse', compact('depenses', 'categories'));
     }
 
-    // Affiche les dépenses archivées
+    // Afficher les dépenses archivées
     public function archivees()
     {
         $depenses = Depense::with('categorie')->where('archiver', true)->get();
-        
         return view('depense.archiveesdepense', compact('depenses'));
     }
 
-    // Formulaire pour créer une nouvelle dépense
+    // Afficher le formulaire de création de dépense
     public function create()
     {
         $categories = Categorie::all();
-        
         return view('depense.create', compact('categories'));
     }
 
-    // Enregistrement d'une nouvelle dépense
+    // Enregistrer une nouvelle dépense
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -58,19 +56,19 @@ class DepenseController extends Controller
             $admin->notify(new DepenseEnregistreeNotification($depense));
         }
 
-        return redirect()->route('depenses.index')->with('success', 'Dépense ajoutée avec succès');
+        return redirect()->route('listeDepense')->with('success', 'Dépense ajoutée avec succès');
     }
 
-    // Formulaire pour modifier une dépense
+    // Afficher le formulaire d'édition de dépense
     public function edit($id)
     {
         $depense = Depense::findOrFail($id);
         $categories = Categorie::all();
-        
+
         return view('depense.edit', compact('depense', 'categories'));
     }
 
-    // Mise à jour d'une dépense
+    // Mettre à jour une dépense existante
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -90,7 +88,7 @@ class DepenseController extends Controller
         return redirect()->route('depenses.index')->with('success', 'Dépense mise à jour avec succès');
     }
 
-    // Suppression d'une dépense
+    // Supprimer une dépense
     public function destroy($id)
     {
         $depense = Depense::findOrFail($id);
@@ -99,7 +97,7 @@ class DepenseController extends Controller
         return redirect()->route('depenses.index')->with('success', 'Dépense supprimée avec succès');
     }
 
-    // Archivage d'une dépense
+    // Archiver une dépense
     public function archiver($id)
     {
         $depense = Depense::findOrFail($id);
@@ -109,47 +107,58 @@ class DepenseController extends Controller
         return redirect()->route('depenses.index')->with('success', 'Dépense archivée avec succès.');
     }
 
-    // Détails d'une dépense
+    // Afficher les détails d'une dépense
     public function show($id)
     {
         $depense = Depense::findOrFail($id);
-        
         return view('gestion.showDepense', compact('depense'));
     }
 
-    // Filtrage des dépenses
+    // Filtrer les dépenses
     public function filtrer(Request $request)
     {
         $filtre = $request->input('filter');
-        $dateInput = $request->input('date');
+        $dateDebutInput = $request->input('date_debut');
+        $dateFinInput = $request->input('date_fin');
 
-        if (!$dateInput) {
-            return back()->with('error', 'Veuillez fournir une date pour le filtre.');
+        if (!$dateDebutInput || !$dateFinInput) {
+            return back()->with('error', 'Veuillez fournir une date de début et une date de fin.');
         }
 
-        $date = Carbon::parse($dateInput);
-        $depenses = Depense::with('categorie');
+        $dateDebut = Carbon::parse($dateDebutInput)->startOfDay();
+        $dateFin = Carbon::parse($dateFinInput)->endOfDay();
 
+        if ($dateDebut->greaterThan($dateFin)) {
+            return back()->with('error', 'La date de début doit être avant la date de fin.');
+        }
+
+        $depenses = Depense::with('categorie')->where('archiver', false)
+            ->whereBetween('created_at', [$dateDebut, $dateFin]);
+
+        // Filtrage selon le type (jour, semaine, mois, année)
         switch ($filtre) {
             case 'jour':
-                $depenses->whereDate('created_at', $date);
+                $depenses->whereDate('created_at', $dateDebut);
                 break;
             case 'semaine':
                 $depenses->whereBetween('created_at', [
-                    $date->startOfWeek(CarbonInterface::MONDAY),
-                    $date->endOfWeek(CarbonInterface::SUNDAY)
+                    $dateDebut->copy()->startOfWeek(CarbonInterface::MONDAY),
+                    $dateFin->copy()->endOfWeek(CarbonInterface::SUNDAY)
                 ]);
                 break;
             case 'mois':
-                $depenses->whereMonth('created_at', $date->month)
-                         ->whereYear('created_at', $date->year);
+                $depenses->whereMonth('created_at', $dateDebut->month)
+                         ->whereYear('created_at', $dateDebut->year);
                 break;
             case 'annee':
-                $depenses->whereYear('created_at', $date->year);
+                $depenses->whereYear('created_at', $dateDebut->year);
                 break;
+            default:
+                return back()->with('error', 'Veuillez choisir un filtre valide (jour, semaine, mois, année).');
         }
 
-        $resultats = $depenses->where('archiver', false)->get();
+        // Récupérer les résultats filtrés
+        $resultats = $depenses->get();
 
         return view('depense.resultats', compact('resultats'));
     }

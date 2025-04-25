@@ -104,7 +104,7 @@ class RecetteController extends Controller
         $recette = Recette::findOrFail($id);
         $recette->delete();
 
-        return redirect()->route('recettes.archiveesphp artisan make:mail WelcomeMail')->with('success', 'Recette supprimée avec succès.');
+        return redirect()->route('recettes.archivees')->with('success', 'Recette supprimée avec succès.');
     }
 
     // Archive une recette
