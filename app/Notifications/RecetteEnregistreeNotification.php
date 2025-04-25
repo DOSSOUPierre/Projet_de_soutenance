@@ -19,7 +19,7 @@ class RecetteEnregistreeNotification extends Notification
         $this->recette = $recette;
     }
 
-    // Déclare que la notification sera envoyée par email
+    // Indique que la notification sera envoyée par email
     public function via($notifiable)
     {
         return ['mail'];
@@ -30,12 +30,11 @@ class RecetteEnregistreeNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Nouvelle recette enregistrée')
-            ->greeting('Bonjour,')
-            ->line('Une nouvelle recette a été enregistrée dans le système.')
+            ->greeting('Bonjour ' . $notifiable->name . ',') // Utilisation du nom du notifiable
+            ->line('Une nouvelle recette a été ajoutée au système.')
             ->line('Description : ' . $this->recette->description)
             ->line('Montant : ' . number_format($this->recette->montant, 2) . ' FCFA')
-            ->action('Voir la recette', route('recettes.show', $this->recette->id))
-            ->line('Merci pour votre attention.')
+            ->line('Merci de votre attention.')
             ->salutation('Cordialement, L’équipe de gestion des recettes');
     }
 }

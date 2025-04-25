@@ -29,12 +29,12 @@ class DepenseEnregistreeNotification extends Notification
     {
         return (new MailMessage)
                     ->subject('Nouvelle dépense enregistrée')
-                    ->greeting('Bonjour,')
+                    ->greeting('Bonjour ' . $notifiable->name . ',') // Utilisation du nom du notifiable
                     ->line('Une nouvelle dépense a été enregistrée avec succès.')
                     ->line('Voici les détails de la dépense :')
                     ->line('Objet : ' . $this->depense->objet)
-                    ->line('Montant : ' . $this->depense->montant)
-                    ->action('Voir la dépense', url('/depenses/' . $this->depense->id))
+                    ->line('Montant : ' . number_format($this->depense->montant, 2) . ' FCFA') // Formatage du montant
+                    // ->action('Voir la dépense', url('/depenses/' . $this->depense->id))
                     ->line('Merci de votre confiance!');
     }
 }
