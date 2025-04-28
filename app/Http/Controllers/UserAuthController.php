@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -65,9 +65,34 @@ class UserAuthController extends Controller
     }
 
     // Créer un nouvel utilisateur (admin) - Redirige vers la vue de création
-    public function createUser()
+    public function createUserForm()
     {
         return view('auth.register'); // Vue de création d'utilisateur (administrateur)
+    }
+
+    // Enregistrer un nouvel utilisateur
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'telephone' => 'required|string|max:15',
+            'poste' => 'required|string|max:255',
+            'type' => 'required|in:admin,user',
+            'password' => 'required|string|confirmed|min:8',
+        ]);
+
+        // Création de l'utilisateur
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'telephone' => $validated['telephone'],
+            'poste' => $validated['poste'],
+            'type' => $validated['type'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('utilisateurs.liste')->with('success', 'Utilisateur créé avec succès!');
     }
 
     // Affiche la page de connexion, redirige si déjà connecté
@@ -158,5 +183,4 @@ class UserAuthController extends Controller
         $utilisateur->delete();  // Suppression de l'utilisateur
         return back()->with('success', 'Utilisateur supprimé avec succès.');
     }
-    
 }

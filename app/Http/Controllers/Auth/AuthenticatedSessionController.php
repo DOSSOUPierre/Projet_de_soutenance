@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -25,6 +26,17 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Vérifier si l'administrateur existe
+        if (User::where('email', 'admin@example.com')->doesntExist()) {
+            // Créer un administrateur par défaut
+            User::create([
+                'name' => 'DOSSOU Pierre',
+                'email' => 'pierredossou98@gmail.com',
+                'password' => Hash::make('pierre'), // Mot de passe par défaut
+                'is_admin' => true, // Vous pouvez personnaliser le champ "is_admin"
+            ]);
+        }
+
         // Validation des champs requis
         $request->validate([
             'email' => 'required|email',
@@ -65,4 +77,5 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+    
 }

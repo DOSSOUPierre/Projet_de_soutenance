@@ -13,6 +13,13 @@ use App\Http\Controllers\VisualisationController;
 
 use App\Http\Controllers\RapportController;
 
+use App\Http\Controllers\RapportArchiveController;
+
+
+Route::get('create-user-form', [UserAuthController::class, 'createUserForm'])->name('utilisateur.create');
+Route::post('create-user', [UserAuthController::class, 'store'])->name('utilisateur.store');
+
+
 // Page d’accueil
 Route::get('/', function () {
     return view('welcome');
@@ -84,6 +91,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/rapport/pdf', [RapportController::class, 'generer'])->name('rapport.pdf');
 
 Route::get('/rapport-litterature-pdf', [App\Http\Controllers\RapportController::class, 'literaturePDF'])->name('rapport.litterature.pdf');
+
+
+Route::get('/archives/pdf', [RapportArchiveController::class, 'generatePDF'])->name('archives.pdf');
 
 
 // Routes Breeze pour l'authentification

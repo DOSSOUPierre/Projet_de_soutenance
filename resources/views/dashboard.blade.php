@@ -131,6 +131,8 @@
                                 <li><a href="{{ route('utilisateurs.liste') }}"><span>Liste des admins</span></a></li>
                                 <li><a href="{{ route('depenses.archivees') }}"><span>Liste des archives des dépenses</span></a></li>
                                 <li><a href="{{ route('recettes.archivees') }}"><span>Liste des archives des recettes</span></a></li>
+                               <li> <a href="{{ route('archives.pdf') }}" >
+                                 <i class="fas fa-file-pdf"></i> <span>Générer Rapport PDF</span></a></li>
                             </ul>
                         @endif
                     @endauth
@@ -166,9 +168,9 @@
                                          <span class="name_user">{{ Auth::user()->name }}</span>
                                      </a>
                                      <div class="dropdown-menu">
-                                         <a class="dropdown-item" href="user">My Profile</a>
-                                         <a class="dropdown-item" href="settings.html">Settings</a>
-                                         <a class="dropdown-item" href="help.html">Help</a>
+                                         <a class="dropdown-item" href="user"></a>
+                                         <a class="dropdown-item" href="settings.html"></a>
+                                         <a class="dropdown-item" href="help.html"></a>
                              
                                          <!-- Formulaire caché pour la déconnexion -->
                                          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -339,7 +341,7 @@
                         </div>
                      </div>
                      <!-- graph -->
-                     <div class="row column2 graph margin_bottom_30">
+                     {{-- <div class="row column2 graph margin_bottom_30">
                         <div class="col-md-l2 col-lg-12">
                            <div class="white_shd full">
                               <div class="full graph_head">
@@ -531,7 +533,7 @@
                               </div>
                            </div>
                         </div>
-                     </div>
+                     </div> --}}
                   </div>
                   <!-- footer -->
                   <div class="container-fluid">

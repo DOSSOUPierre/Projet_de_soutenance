@@ -1,3 +1,7 @@
+@extends('layouts.master')
+
+@section('contenu')
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -44,11 +48,11 @@
         </div>
         <div class="col-md-3">
             <label for="date_debut" class="form-label">Date de début</label>
-            <input type="date" name="date_debut" id="date_debut" class="form-control" value="{{ request('date_debut') }}">
+            <input type="date" name="date_debut" id="date_debut" class="form-control" value="{{ request('date_debut') }}"/>
         </div>
         <div class="col-md-3">
             <label for="date_fin" class="form-label">Date de fin</label>
-            <input type="date" name="date_fin" id="date_fin" class="form-control" value="{{ request('date_fin') }}">
+            <input type="date" name="date_fin" id="date_fin" class="form-control" value="{{ request('date_fin') }}"/>
         </div>
         <div class="col-md-3 d-flex gap-2">
             <button type="submit" class="btn btn-primary w-100">Appliquer</button>
@@ -213,3 +217,5 @@
 </script>
 </body>
 </html>
+
+@endsection

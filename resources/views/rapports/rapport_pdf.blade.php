@@ -23,11 +23,16 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
+            table-layout: fixed; /* Pour forcer la taille fixe */
         }
         th, td {
             border: 1px solid #999;
             padding: 8px 12px;
             text-align: left;
+            word-wrap: break-word; /* Casse le mot s'il est trop long */
+            word-break: break-word; /* Assure que même les mots longs se cassent */
+            max-width: 150px; /* Limite la taille des colonnes */
+            overflow-wrap: break-word; /* Pour compatibilité supplémentaire */
         }
         th {
             background-color: #f1f1f1;
@@ -142,7 +147,6 @@
         </table>
     </div>
 
-    <!-- Conseils Financiers -->
     <div class="advice">
         <h3>Conseils Financiers</h3>
         @if($totalRecettes > $totalDepenses)
@@ -153,6 +157,5 @@
             <p>Votre entreprise est en équilibre cette période. C'est un bon point, mais il serait prudent de continuer à chercher des opportunités pour améliorer vos revenus tout en maintenant vos dépenses sous contrôle.</p>
         @endif
     </div>
-
 </body>
 </html>

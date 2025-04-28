@@ -23,3 +23,4 @@ class CategorieSeeder extends Seeder // Définition de la classe CategorieSeeder
         }
     }
 }
+// php artisan db:seed --class=CategorieSeeder:Pour envoyer dans base de donnée
