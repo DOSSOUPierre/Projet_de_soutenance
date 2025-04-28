@@ -12,12 +12,12 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="fw-bold text-primary">Liste des Recettes</h2>
         <div>
-            <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#filtreModal">
-                <i class="fas fa-filter me-1"></i> Filtrer
+            <button class="btn btn-info me-2" data-bs-toggle="modal" data-bs-target="#ajouterCategorieModal">
+                <i class="fas fa-folder-plus me-1"></i> Ajouter une Catégorie
             </button>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ajouterRecetteModal">
                 <i class="fas fa-plus me-2"></i> Ajouter une Recette
-            </button>
+            </button> 
         </div>
     </div>
 
@@ -50,11 +50,11 @@
                         <td class="text-success fw-bold">{{ number_format($recette->montant, 2) }} FCFA</td>
                         <td>{{ $recette->telephone }}</td>
                         <td>{{ $recette->categorie->nom }}</td>
-                        <td>{{ $recette->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $recette->created_at->locale('fr')->isoFormat('dddd, D MMMM YYYY à HH:mm') }}</td>
                         <td>
                             <div class="d-flex gap-2">
                                 <a href="{{ route('recettes.show', $recette->id) }}" class="btn btn-info btn-sm" title="Voir">
-                                    <i class="fas fa-eye"></i> 
+                                    <i class="fas fa-eye"></i> Voir
                                 </a>
                                 <form action="{{ route('recette.archiver', $recette->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette recette ?')">
                                     @csrf
@@ -85,27 +85,27 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label>Description</label>
-                            <input type="text" name="description" class="form-control" required>
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label>Objet</label>
-                            <input type="text" name="objet" class="form-control" required>
+                            <label for="objet" class="form-label">Objet</label>
+                            <input type="text" name="objet" id="objet" class="form-control" required>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label>Montant (FCFA)</label>
-                                <input type="number" step="0.01" name="montant" class="form-control" required>
+                                <label for="montant" class="form-label">Montant (FCFA)</label>
+                                <input type="number" step="0.01" name="montant" id="montant" class="form-control" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label>Téléphone</label>
-                                <input type="text" name="telephone" class="form-control" required>
+                                <label for="telephone" class="form-label">Téléphone</label>
+                                <input type="text" name="telephone" id="telephone" class="form-control" required>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label>Catégorie</label>
-                            <select name="categorie_id" class="form-select" required>
-                                <option>Choisissez une catégorie :</option>
+                            <label for="categorie_id" class="form-label">Catégorie</label>
+                            <select name="categorie_id" id="categorie_id" class="form-select" required>
+                                <option value="">Choisissez une catégorie</option>
                                 @foreach($categories as $categorie)
                                     <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
                                 @endforeach
@@ -121,39 +121,29 @@
         </div>
     </div>
 
-    <!-- MODAL FILTRE -->
-    <div class="modal fade" id="filtreModal" tabindex="-1" aria-labelledby="filtreModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form id="filtreForm">
+    <!-- MODAL AJOUT CATEGORIE -->
+    <div class="modal fade" id="ajouterCategorieModal" tabindex="-1" aria-labelledby="ajouterCategorieModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="{{ route('categories_recette.create') }}">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Filtrer les Recettes</h5>
+                        <h5 class="modal-title">Ajouter une Catégorie</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-4">
-                                <select name="filter" class="form-select" required>
-                                    <option value="jour">Jour</option>
-                                    <option value="semaine">Semaine</option>
-                                    <option value="mois">Mois</option>
-                                    <option value="annee">Année</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="date_debut">Date Début</label>
-                                <input type="date" name="date_debut" id="date_debut" class="form-control" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="date_fin">Date Fin</label>
-                                <input type="date" name="date_fin" id="date_fin" class="form-control" required>
-                            </div>
+                        <div class="mb-3">
+                            <label for="nom">Nom de la Catégorie</label>
+                            <input type="text" name="nom" id="nom" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-search me-1"></i> Rechercher
-                        </button>
-                        <div id="resultatsFiltrageModal" class="mt-4"></div>
+                        <div class="mb-3">
+                            <label for="description">Description de la Catégorie</label>
+                            <input type="text" name="description" id="description" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-info">Ajouter</button>
                     </div>
                 </div>
             </form>
@@ -169,43 +159,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body">
-                    <p id="descriptionText" style="max-height: 200px; overflow-y: auto;"></p> <!-- Limiter la hauteur -->
+                    <p id="descriptionText" style="max-height: 200px; overflow-y: auto;"></p>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
-
 @endsection
-
-@push('scripts')
-<script>
-    // Gestion du formulaire de filtrage
-    $('#filtreForm').on('submit', function(e) {
-        e.preventDefault();
-
-        let formData = $(this).serialize();
-
-        $.ajax({
-            url: "{{ route('recettes.filtrer') }}",
-            method: "GET",
-            data: formData,
-            success: function(response) {
-                $('#resultatsFiltrageModal').html(response);
-            },
-            error: function(xhr) {
-                $('#resultatsFiltrageModal').html('<div class="alert alert-danger">Une erreur est survenue.</div>');
-            }
-        });
-    });
-
-    // Injection de la description dans le modal
-    $('#descriptionModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var description = button.data('description');
-        var modal = $(this);
-        modal.find('#descriptionText').text(description);
-    });
-</script>
-@endpush

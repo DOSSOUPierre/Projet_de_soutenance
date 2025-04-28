@@ -27,13 +27,33 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
     <style>
-        /* Scroll uniquement horizontal dans la zone de contenu */
         .scrollable-content {
             overflow-x: auto;
             overflow-y: hidden;
             white-space: nowrap;
             max-width: 100%;
             padding-bottom: 20px;
+        }
+
+        .midde_cont {
+            min-height: calc(100vh - 100px);
+            background-color: white;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        #content {
+            width: 100%;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            z-index: 1000;
         }
     </style>
 </head>
@@ -70,7 +90,9 @@
                 <h4>General</h4>
                 <ul class="list-unstyled components">
                     <li><a href="{{ route('listeDepense') }}"><i class="fa fa-wallet purple_color"></i> Gestion des Dépenses</a></li>
+                    <li><a href="{{ route('categories.index') }}"><i class="fa fa-tags purple_color me-2"></i> <span>Catégories de Dépense</span></a></li>
                     <li><a href="{{ route('listeRecette') }}"><i class="fa fa-money-bill-wave purple_color"></i> Gestion des Recettes</a></li>
+                    <li><a href="{{ route('categories_recette.index') }}"><i class="fa fa-tags purple_color me-2"></i> <span>Catégories de Recette</span></a></li>
                     <li><a href="{{ route('rapport.pdf') }}"><i class="fa fa-bar-chart text-success"></i> Rapport Financier</a></li>
                     <li><a href="{{ route('rapport.litterature.pdf') }}"><i class="fa fa-book text-primary"></i> Rapport de Littérature</a></li>
                     <li><a href="{{ route('visualisation') }}"><i class="fa fa-bar-chart-o green_color"></i> Visualisation</a></li>
@@ -82,12 +104,11 @@
                                     <i class="fa fa-user-shield yellow_color"></i> Gestion des admins
                                 </a>
                                 <ul class="collapse list-unstyled" id="gestionAdmins">
-                                    <li><a href="{{ route('utilisateur.create') }}"><span>Créer un compte pour admins</span></a></li>
-                                    <li><a href="{{ route('utilisateurs.liste') }}"><span>Liste des admins</span></a></li>
-                                    <li><a href="{{ route('depenses.archivees') }}"><span>Liste des archives des dépenses</span></a></li>
-                                    <li><a href="{{ route('recettes.archivees') }}"><span>Liste des archives des recettes</span></a></li>
-                                   <li> <a href="{{ route('archives.pdf') }}" >
-                                     <i class="fas fa-file-pdf"></i> <span>Générer Rapport PDF</span></a></li>
+                                    <li><a href="{{ route('utilisateur.create') }}">Créer un compte pour admins</a></li>
+                                    <li><a href="{{ route('utilisateurs.liste') }}">Liste des admins</a></li>
+                                    <li><a href="{{ route('depenses.archivees') }}">Liste des archives des dépenses</a></li>
+                                    <li><a href="{{ route('recettes.archivees') }}">Liste des archives des recettes</a></li>
+                                    <li><a href="{{ route('archives.pdf') }}"><i class="fas fa-file-pdf"></i> Générer Rapport PDF</a></li>
                                 </ul>
                             </li>
                         @endif
@@ -133,7 +154,7 @@
                                 </ul>
 
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -150,11 +171,10 @@
                         </div>
                     </div>
 
-                    <!-- Début de la zone scrollable -->
+                    <!-- Zone scrollable -->
                     <div class="scrollable-content">
                         @yield("contenu")
                     </div>
-                    <!-- Fin de la zone scrollable -->
 
                 </div>
 
@@ -180,10 +200,9 @@
 <script>
     var ps = new PerfectScrollbar('#sidebar');
 
-    // Gestion du dropdown profil
     document.addEventListener("DOMContentLoaded", function () {
-        var profile = document.querySelector(".user_profile_dd > li > a");
-        var menu = document.querySelector(".user_profile_dd .dropdown-menu");
+        const profile = document.querySelector(".user_profile_dd > li > a");
+        const menu = document.querySelector(".user_profile_dd .dropdown-menu");
 
         profile.addEventListener("click", function (event) {
             event.preventDefault();

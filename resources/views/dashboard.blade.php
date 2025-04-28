@@ -78,11 +78,24 @@
        <i class="fa fa-wallet purple_color"></i> <span>Gestion des Dépenses</span>
    </a>
 </li>
+<!-- 🔷 Catégories des Dépenses -->
+<li>
+   <a href="{{ route('categories.index') }}">
+       <i class="fa fa-tags purple_color me-2"></i> <span>Catégories de Dépenses</span>
+   </a>
+</li>
+
 
 <!-- 🔷 Gestion des Recettes -->
 <li>
    <a href="{{ route('listeRecette') }}">
        <i class="fa fa-money-bill-wave purple_color me-2"></i> <span>Gestion des Recettes</span>
+   </a>
+</li>
+<!-- 🔷 Catégories des Dépenses -->
+<li>
+   <a href="{{ route('categories_recette.index') }}">
+       <i class="fa fa-tags purple_color me-2"></i> <span>Catégories de Recettes</span>
    </a>
 </li>
 
@@ -200,7 +213,94 @@
                            </div>
                         </div>
                      </div>
-                     <div class="row column1">
+                     <style>
+                        .icon-wrapper {
+                            width: 80px;
+                            height: 80px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 50%;
+                            background-color: #f8f9fa;
+                            transition: transform 0.3s ease;
+                            animation: fadeInUp 0.6s ease-in-out both;
+                            margin: auto;
+                            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                        }
+                    
+                        .icon-wrapper i {
+                            font-size: 38px;
+                            transition: transform 0.3s ease;
+                        }
+                    
+                        .icon-wrapper:hover i {
+                            transform: rotate(15deg) scale(1.2);
+                        }
+                    
+                        @keyframes fadeInUp {
+                            from {
+                                opacity: 0;
+                                transform: translateY(20px);
+                            }
+                            to {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                        }
+                    
+                        .total_no {
+                            font-size: 20px;
+                            font-weight: bold;
+                        }
+                    
+                        .head_couter {
+                            font-size: 14px;
+                            color: #555;
+                        }
+                    
+                        /* Alignement horizontal des icônes */
+                        .row.column1 {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: flex-start;
+                            flex-wrap: nowrap; /* Empêche le retour à la ligne */
+                        }
+                    
+                        .col-md-6, .col-lg-3 {
+                            flex: 1;
+                            max-width: 18%; /* Limiter la largeur à environ 20% pour 5 éléments */
+                            margin-bottom: 30px;
+                        }
+                    
+                        .counter_section {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            text-align: center;
+                            padding: 10px;
+                            border-radius: 10px;
+                            border: 1px solid #f0f0f0;
+                            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                        }
+                    
+                        .counter_section .couter_icon {
+                            margin-bottom: 10px; /* Espacement entre l'icône et les textes */
+                        }
+                    
+                        .counter_section .counter_no {
+                            margin-top: 10px; /* Espacement entre le nombre et le texte */
+                        }
+                    
+                        /* Pour éviter le débordement du texte */
+                        .counter_section .counter_no p {
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    </style>
+                    
+                    <div class="row column1">
                         <div class="col-md-6 col-lg-3">
                            <div class="full counter_section margin_bottom_30">
                               <div class="couter_icon">
@@ -210,58 +310,109 @@
                               </div>
                               <div class="counter_no">
                                  <div>
-                                    <p class="total_no">25</p>
-                                    <p class="head_couter">Utilisateur</p>
+                                    <p class="total_no">2500</p>
+                                    <p class="head_couter">Welcome</p>
                                  </div>
                               </div>
                            </div>
                         </div>
+                    
                         <div class="col-md-6 col-lg-3">
-                           <div class="full counter_section margin_bottom_30">
-                              <div class="couter_icon">
-                                 <div> 
-                                    <i class="fa fa-clock-o blue1_color"></i>
-                                 </div>
-                              </div>
-                              <div class="counter_no">
-                                 <div>
-                                    <p class="total_no">123.50</p>
-                                    <p class="head_couter">Average Time</p>
-                                 </div>
-                              </div>
-                           </div>
+                            <div class="full counter_section margin_bottom_30">
+                                <div class="couter_icon">
+                                    <div class="icon-wrapper">
+                                        <i class="fas fa-coins text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="counter_no">
+                                    <p class="total_no counter" data-target="{{ $totalDepenses }}">0</p>
+                                    <p class="head_couter">Dépenses (FCFA)</p>
+                                </div>
+                            </div>
                         </div>
+                    
                         <div class="col-md-6 col-lg-3">
-                           <div class="full counter_section margin_bottom_30">
-                              <div class="couter_icon">
-                                 <div> 
-                                    <i class="fa fa-cloud-download green_color"></i>
-                                 </div>
-                              </div>
-                              <div class="counter_no">
-                                 <div>
-                                    <p class="total_no">1,805</p>
-                                    <p class="head_couter">Collections</p>
-                                 </div>
-                              </div>
-                           </div>
+                            <div class="full counter_section margin_bottom_30">
+                                <div class="couter_icon">
+                                    <div class="icon-wrapper">
+                                        <i class="fas fa-hand-holding-usd text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="counter_no">
+                                    <p class="total_no counter" data-target="{{ $totalRecettes }}">0</p>
+                                    <p class="head_couter">Recettes (FCFA)</p>
+                                </div>
+                            </div>
                         </div>
+                    
                         <div class="col-md-6 col-lg-3">
-                           <div class="full counter_section margin_bottom_30">
-                              <div class="couter_icon">
-                                 <div> 
-                                    <i class="fa fa-comments-o red_color"></i>
-                                 </div>
-                              </div>
-                              <div class="counter_no">
-                                 <div>
-                                    <p class="total_no">54</p>
-                                    <p class="head_couter">Comments</p>
-                                 </div>
-                              </div>
-                           </div>
+                            <div class="full counter_section margin_bottom_30">
+                                <div class="couter_icon">
+                                    <div class="icon-wrapper">
+                                        <i class="fas fa-file-invoice-dollar text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="counter_no">
+                                    <p class="total_no counter" data-target="{{ $totalRapports }}">0</p>
+                                    <p class="head_couter">Rapports</p>
+                                </div>
+                            </div>
                         </div>
-                     </div>
+                    
+                        <!-- Icône pour la visualisation -->
+                        <div class="col-md-6 col-lg-3">
+                            <div class="full counter_section margin_bottom_30">
+                                <div class="couter_icon">
+                                    <div class="icon-wrapper">
+                                        <i class="fas fa-chart-line text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="counter_no">
+                                    <p class="total_no counter" data-target="{{ $totalVisualisations }}">0</p>
+                                    <p class="head_couter">Visualisations</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <script>
+                        // Effet compteur animé
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const counters = document.querySelectorAll('.counter');
+                            counters.forEach(counter => {
+                                const target = parseFloat(counter.getAttribute('data-target'));
+                                const isCurrency = counter.textContent.includes('FCFA');
+                                let current = 0;
+                                const increment = target / 60;
+                    
+                                const updateCounter = () => {
+                                    if (current < target) {
+                                        current += increment;
+                                        if (isCurrency) {
+                                            counter.textContent = formatNumber(current) + " FCFA";
+                                        } else {
+                                            counter.textContent = Math.floor(current);
+                                        }
+                                        requestAnimationFrame(updateCounter);
+                                    } else {
+                                        counter.textContent = isCurrency
+                                            ? formatNumber(target) + " FCFA"
+                                            : target;
+                                    }
+                                };
+                                updateCounter();
+                            });
+                    
+                            function formatNumber(n) {
+                                return n.toLocaleString('fr-FR', {
+                                    minimumFractionDigits: 2, 
+                                    maximumFractionDigits: 2
+                                });
+                            }
+                        });
+                    </script>
+                    
+                    
                      <div class="row column1 social_media_section">
                         <div class="col-md-6 col-lg-3">
                            <div class="full socile_icons fb margin_bottom_30">

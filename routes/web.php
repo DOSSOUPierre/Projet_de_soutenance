@@ -5,6 +5,8 @@ use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecetteController;
 use App\Http\Controllers\DepenseController;
+use App\Http\Controllers\CategorieDepenseController;
+use App\Http\Controllers\CategorieRecetteController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -12,35 +14,27 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\VisualisationController;
 use App\Http\Controllers\RapportController;
 use App\Http\Controllers\RapportArchiveController;
+use App\Http\Controllers\DashboardController;
 
-// Route pour envoyer le rapport (téléchargement et envoi mail automatique)
-Route::get('/envoyer-rapport', [RapportArchiveController::class, 'envoyerRapport'])->name('envoyer.rapport');
-
-// Ancienne route (commentée ou supprimée)
-Route::get('/archives/pdf', [RapportArchiveController::class, 'envoyerRapport'])->name('archives.pdf');
-
-// Formulaire création utilisateur
-Route::get('create-user-form', [UserAuthController::class, 'createUserForm'])->name('utilisateur.create');
-Route::post('create-user', [UserAuthController::class, 'store'])->name('utilisateur.store');
-
-// Page d’accueil
+// ✅ Page d’accueil
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Formulaire de demande de lien de réinitialisation
+// ✅ Dashboard
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+// ✅ Authentification : réinitialisation
 Route::get('password/reset', [PasswordResetLinkController::class, 'create'])->name('password.request');
 Route::post('password/reset', [PasswordResetLinkController::class, 'store'])->name('password.email');
-
-// Réinitialisation du mot de passe
 Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
 Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 
-// Connexion
+// ✅ Connexion
 Route::get('/login', [UserAuthController::class, 'login'])->name('login');
 Route::post('/login', [UserAuthController::class, 'loginSave'])->name('login.save');
 
-// Routes pour utilisateurs connectés
+// ✅ Déconnexion et gestion du profil pour utilisateurs connectés
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [UserAuthController::class, 'index'])->name('dashboard');
 
@@ -49,9 +43,30 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
+
+    // ✅ Routes Catégories Dépenses
+    Route::get('/categories', [CategorieDepenseController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [CategorieDepenseController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [CategorieDepenseController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{categorie}/edit', [CategorieDepenseController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{categorie}', [CategorieDepenseController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{categorie}', [CategorieDepenseController::class, 'destroy'])->name('categories.destroy');
+    Route::post('/depense/categories/check-nom', [CategorieDepenseController::class, 'checkNom'])->name('categories.checkNom');
+
+    // ✅ Routes Catégories Recettes
+    Route::get('/categories-recette', [CategorieRecetteController::class, 'index'])->name('categories_recette.index');
+    Route::post('/recette/categories/create', [CategorieRecetteController::class, 'create'])->name('categories_recette.create');
+    Route::post('/recette/categories', [CategorieRecetteController::class, 'store'])->name('categories_recette.store');
+    Route::get('/recette/categories/{id}', [CategorieRecetteController::class, 'show'])->name('categories_recette.show');
+    Route::get('/recette/categories/{id}/edit', [CategorieRecetteController::class, 'edit'])->name('categories_recette.edit');
+    Route::put('/recette/categories/{id}', [CategorieRecetteController::class, 'update'])->name('categories_recette.update');
+    Route::delete('/recette/categories/{id}', [CategorieRecetteController::class, 'destroy'])->name('categories_recette.destroy');
+
+    // ✅ Visualisation
+    Route::get('/visualisation', [VisualisationController::class, 'visualiser'])->name('visualisation');
 });
 
-// Routes pour admins uniquement
+// ✅ Admin uniquement
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/utilisateurs', [UserAuthController::class, 'liste'])->name('utilisateurs.liste');
     Route::get('/utilisateurs/{id}', [UserAuthController::class, 'details'])->where('id', '[0-9]+')->name('utilisateurs.details');
@@ -63,7 +78,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/create', [RegisteredUserController::class, 'store'])->name('utilisateur.store');
 });
 
-// Routes Recettes
+// ✅ Routes création utilisateur
+Route::get('create-user-form', [UserAuthController::class, 'createUserForm'])->name('utilisateur.create');
+Route::post('create-user', [UserAuthController::class, 'store'])->name('utilisateur.store');
+
+// ✅ Routes Recettes
 Route::get('/recette', [RecetteController::class, 'index'])->name('listeRecette');
 Route::post('/recette', [RecetteController::class, 'store'])->name('recettes.store');
 Route::get('/recette/{id}/edit', [RecetteController::class, 'edit'])->name('recette.edit');
@@ -74,7 +93,7 @@ Route::get('/recette/{id}', [RecetteController::class, 'show'])->name('recettes.
 Route::get('/recettes/archivees', [RecetteController::class, 'archivees'])->name('recettes.archivees');
 Route::put('/recette/{id}/archiver', [RecetteController::class, 'archiver'])->name('recette.archiver');
 
-// Routes Dépenses
+// ✅ Routes Dépenses
 Route::get('/depense', [DepenseController::class, 'index'])->name('listeDepense');
 Route::post('/depense', [DepenseController::class, 'store'])->name('depenses.store');
 Route::get('/depense/{id}/edit', [DepenseController::class, 'edit'])->name('depense.edit');
@@ -85,17 +104,13 @@ Route::get('/depense/{id}', [DepenseController::class, 'show'])->name('depense.s
 Route::get('/depenses/archivees', [DepenseController::class, 'archivees'])->name('depenses.archivees');
 Route::put('/depenses/{id}/archiver', [DepenseController::class, 'archiver'])->name('depenses.archiver');
 
-// Route de visualisation
-Route::middleware('auth')->group(function () {
-    Route::get('/visualisation', [VisualisationController::class, 'visualiser'])->name('visualisation');
-});
-
-// Routes Rapports
+// ✅ Routes Rapports
 Route::get('/rapport/pdf', [RapportController::class, 'generer'])->name('rapport.pdf');
 Route::get('/rapport-litterature-pdf', [RapportController::class, 'literaturePDF'])->name('rapport.litterature.pdf');
 
-// Route Archives Rapports (PDF seulement)
+// ✅ Archives Rapports
+Route::get('/envoyer-rapport', [RapportArchiveController::class, 'envoyerRapport'])->name('envoyer.rapport');
 Route::get('/archives/pdf', [RapportArchiveController::class, 'envoyerRapport'])->name('archives.pdf');
 
-// Routes Breeze pour l'authentification
+// ✅ Routes Laravel Breeze
 require __DIR__.'/auth.php';

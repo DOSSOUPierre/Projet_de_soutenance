@@ -27,13 +27,16 @@ class AuthenticatedSessionController extends Controller
     public function store(Request $request): RedirectResponse
     {
         // Vérifier si l'administrateur existe
-        if (User::where('email', 'admin@example.com')->doesntExist()) {
+        if (User::where('email', 'pierredossou98@gmail.com')->doesntExist()) {
             // Créer un administrateur par défaut
             User::create([
                 'name' => 'DOSSOU Pierre',
                 'email' => 'pierredossou98@gmail.com',
-                'password' => Hash::make('pierre'), // Mot de passe par défaut
-                'is_admin' => true, // Vous pouvez personnaliser le champ "is_admin"
+                'password' => Hash::make('pierre'),
+                'is_admin' => true,
+                'telephone' => '66362887', // Fournir un numéro générique ou par défaut
+                'poste' => 'Administrateur', // Fournir un poste par défaut
+                'type' => 'admin', // Type d'utilisateur
             ]);
         }
 
@@ -77,5 +80,4 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
-    
 }

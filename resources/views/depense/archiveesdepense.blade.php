@@ -31,7 +31,8 @@
                         </td>
                         <td>{{ $depense->objet }}</td>
                         <td>{{ $depense->montant }} FCFA</td>
-                        <td>{{ $depense->categorie->nom }}</td>
+                        <td>{{ $depense->categorie ? $depense->categorie->nom : 'Aucune catégorie' }}</td>
+
                         <td>{{ $depense->created_at->format('d/m/Y H:i') }}</td>
                         <td class="text-center">
                             {{-- <a href="{{ route('depense.show', $depense->id) }}" class="btn btn-info btn-sm me-1" title="Voir">

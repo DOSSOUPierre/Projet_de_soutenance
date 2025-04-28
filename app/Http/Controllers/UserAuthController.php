@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Recette;
+use App\Models\Depense;
+use App\Models\Rapport;
+use App\Models\Visualisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +20,22 @@ class UserAuthController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        $users = User::all();
-        return view('dashboard', compact('users'));
+
+        // Calcul des totaux
+        $totalUtilisateurs = User::count();
+        $totalDepenses = Depense::sum('montant');
+        $totalRecettes = Recette::sum('montant');
+        $totalRapports = Rapport::count();
+        $totalVisualisations = Visualisation::count(); // Assurez-vous d'avoir le bon modèle
+
+        // Envoie les données à la vue
+        return view('dashboard', compact(
+            'totalUtilisateurs',
+            'totalDepenses',
+            'totalRecettes',
+            'totalRapports',
+            'totalVisualisations'
+        ));
     }
 
     // Affiche le formulaire d'inscription, redirige si l'utilisateur est déjà connecté
@@ -42,6 +60,7 @@ class UserAuthController extends Controller
             'terms' => ['accepted'],
             'type' => ['required', 'string', 'in:user,admin'],
         ]);
+
         // Log des données validées avant la création
         Log::info('Données validées avant création utilisateur : ', ['type' => $validated['type']]);
 

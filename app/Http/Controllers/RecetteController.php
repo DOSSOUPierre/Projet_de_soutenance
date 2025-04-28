@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recette;
-use App\Models\Categorie;
+use App\Models\CategorieRecette;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -20,7 +20,7 @@ class RecetteController extends Controller
             ->latest()
             ->paginate(10);
 
-        $categories = Categorie::all();
+        $categories = CategorieRecette::all();
 
         return view('recette.indexrecette', compact('recettes', 'categories'));
     }
@@ -39,7 +39,7 @@ class RecetteController extends Controller
     // Affiche le formulaire de création
     public function create()
     {
-        $categories = Categorie::all();
+        $categories = CategorieRecette::all();
         return view('recette.create', compact('categories'));
     }
 
@@ -51,11 +51,10 @@ class RecetteController extends Controller
             'objet' => 'required|string|max:255',
             'montant' => 'required|numeric|min:0',
             'telephone' => 'nullable|string|max:20',
-            'categorie_id' => 'required|exists:categories,id',
+            'categorie_id' => 'required|exists:categorie_recettes,id',
             'archiver' => 'nullable|boolean',
         ]);
 
-        // Coche d'archivage (case à cocher HTML)
         $validated['archiver'] = $request->has('archiver');
 
         $recette = Recette::create($validated);
@@ -73,7 +72,7 @@ class RecetteController extends Controller
     public function edit($id)
     {
         $recette = Recette::findOrFail($id);
-        $categories = Categorie::all();
+        $categories = CategorieRecette::all();
 
         return view('recette.edit', compact('recette', 'categories'));
     }
@@ -86,7 +85,7 @@ class RecetteController extends Controller
             'objet' => 'required|string|max:255',
             'montant' => 'required|numeric|min:0',
             'telephone' => 'nullable|string|max:20',
-            'categorie_id' => 'required|exists:categories,id',
+            'categorie_id' => 'required|exists:categorie_recettes,id',
             'archiver' => 'nullable|boolean',
         ]);
 
