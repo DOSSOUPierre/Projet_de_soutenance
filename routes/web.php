@@ -10,15 +10,18 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\VisualisationController;
-
 use App\Http\Controllers\RapportController;
-
 use App\Http\Controllers\RapportArchiveController;
 
+// Route pour envoyer le rapport (téléchargement et envoi mail automatique)
+Route::get('/envoyer-rapport', [RapportArchiveController::class, 'envoyerRapport'])->name('envoyer.rapport');
 
+// Ancienne route (commentée ou supprimée)
+Route::get('/archives/pdf', [RapportArchiveController::class, 'envoyerRapport'])->name('archives.pdf');
+
+// Formulaire création utilisateur
 Route::get('create-user-form', [UserAuthController::class, 'createUserForm'])->name('utilisateur.create');
 Route::post('create-user', [UserAuthController::class, 'store'])->name('utilisateur.store');
-
 
 // Page d’accueil
 Route::get('/', function () {
@@ -87,14 +90,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/visualisation', [VisualisationController::class, 'visualiser'])->name('visualisation');
 });
 
-
+// Routes Rapports
 Route::get('/rapport/pdf', [RapportController::class, 'generer'])->name('rapport.pdf');
+Route::get('/rapport-litterature-pdf', [RapportController::class, 'literaturePDF'])->name('rapport.litterature.pdf');
 
-Route::get('/rapport-litterature-pdf', [App\Http\Controllers\RapportController::class, 'literaturePDF'])->name('rapport.litterature.pdf');
-
-
-Route::get('/archives/pdf', [RapportArchiveController::class, 'generatePDF'])->name('archives.pdf');
-
+// Route Archives Rapports (PDF seulement)
+Route::get('/archives/pdf', [RapportArchiveController::class, 'envoyerRapport'])->name('archives.pdf');
 
 // Routes Breeze pour l'authentification
 require __DIR__.'/auth.php';

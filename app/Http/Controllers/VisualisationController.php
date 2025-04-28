@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 
 class VisualisationController extends Controller
 {
+    // Méthode principale pour visualiser les recettes et dépenses selon une période ou une plage de dates
     public function visualiser(Request $request)
     {
-        $periode = $request->input('periode');
-        $dateDebut = $request->input('date_debut');
-        $dateFin = $request->input('date_fin');
+        $periode = $request->input('periode'); // Ex: jour, semaine, mois, année
+        $dateDebut = $request->input('date_debut'); // Plage personnalisée début
+        $dateFin = $request->input('date_fin'); // Plage personnalisée fin
 
         // Aucune action si ni période ni dates ne sont spécifiées
         if (empty($periode) && (empty($dateDebut) || empty($dateFin))) {
@@ -43,11 +44,12 @@ class VisualisationController extends Controller
             ]);
         }
 
-        // 2. Déterminer les dates à utiliser
+        // 2. Déterminer les dates à utiliser pour la recherche
         if (!empty($dateDebut) && !empty($dateFin)) {
             $debut = $dateDebut;
             $fin = $dateFin;
         } else {
+            // Calcul automatique des dates selon la période choisie
             switch ($periode) {
                 case 'jour':
                     $debut = now()->startOfDay();
@@ -69,7 +71,7 @@ class VisualisationController extends Controller
             }
         }
 
-        // 3. Récupération des données
+        // 3. Récupération des recettes archivées=false sur la période sélectionnée
         $recettes = Recette::where('archiver', false)
             ->whereBetween('created_at', [$debut, $fin])
             ->selectRaw('SUM(montant) as total, DATE(created_at) as date')
@@ -77,6 +79,7 @@ class VisualisationController extends Controller
             ->orderBy('date')
             ->get();
 
+        // 3. Récupération des dépenses archivées=false sur la période sélectionnée
         $depenses = Depense::where('archiver', false)
             ->whereBetween('created_at', [$debut, $fin])
             ->selectRaw('SUM(montant) as total, DATE(created_at) as date')
@@ -84,10 +87,11 @@ class VisualisationController extends Controller
             ->orderBy('date')
             ->get();
 
-        // 4. Traitement des données
+        // 4. Vérification s'il y a des données ou non
         $aucune_donnee = $recettes->isEmpty() && $depenses->isEmpty();
 
         if ($aucune_donnee) {
+            // Cas où il n'y a aucune recette ni dépense
             $labels = collect();
             $recettesData = [];
             $depensesData = [];
@@ -101,22 +105,33 @@ class VisualisationController extends Controller
                 'solde' => 0,
             ];
         } else {
+            // Construction des labels (dates) triés
             $labels = $recettes->pluck('date')->merge($depenses->pluck('date'))->unique()->sort()->values();
+
             $recettesData = [];
             $depensesData = [];
 
+            // Remplissage des données recettes/dépenses alignées sur les labels
             foreach ($labels as $label) {
                 $recettesData[] = $recettes->firstWhere('date', $label)->total ?? 0;
                 $depensesData[] = $depenses->firstWhere('date', $label)->total ?? 0;
             }
 
+            // Calculs des totaux
             $totalRecettes = array_sum($recettesData);
             $totalDepenses = array_sum($depensesData);
+
+            // Évaluation de la performance
             $performance = $this->evaluerPerformance($totalRecettes, $totalDepenses);
+
+            // Génération du rapport textuel
             $rapport = $this->genererRapport($totalRecettes, $totalDepenses);
+
+            // Prévision budgétaire
             $budgetPrevisionnel = $this->prevoirBudget($recettesData, $depensesData);
         }
 
+        // 5. Retourner la vue avec toutes les données préparées
         return view('visualisation', compact(
             'labels',
             'recettesData',
@@ -130,6 +145,7 @@ class VisualisationController extends Controller
         ));
     }
 
+    // Méthode privée pour évaluer la situation financière (bénéfice, perte, équilibre)
     private function evaluerPerformance($totalRecettes, $totalDepenses)
     {
         if ($totalRecettes > $totalDepenses) {
@@ -141,6 +157,7 @@ class VisualisationController extends Controller
         }
     }
 
+    // Méthode privée pour générer une recommandation textuelle basée sur les résultats
     private function genererRapport($totalRecettes, $totalDepenses)
     {
         $difference = $totalRecettes - $totalDepenses;
@@ -154,6 +171,7 @@ class VisualisationController extends Controller
         }
     }
 
+    // Méthode privée pour prévoir le prochain budget basé sur la moyenne des recettes et dépenses
     private function prevoirBudget($recettesData, $depensesData)
     {
         $moyenneRecettes = count($recettesData) ? array_sum($recettesData) / count($recettesData) : 0;

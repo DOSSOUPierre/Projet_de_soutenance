@@ -210,8 +210,8 @@
                               </div>
                               <div class="counter_no">
                                  <div>
-                                    <p class="total_no">2500</p>
-                                    <p class="head_couter">Welcome</p>
+                                    <p class="total_no">25</p>
+                                    <p class="head_couter">Utilisateur</p>
                                  </div>
                               </div>
                            </div>

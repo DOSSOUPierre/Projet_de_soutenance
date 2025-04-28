@@ -1,22 +1,17 @@
 <?php
-
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Storage;
 
 class RapportArchivesNotification extends Notification
 {
-    use Queueable;
+    private $filePath;
 
-    protected $pdfPath;
-
-    public function __construct($pdfPath)
+    public function __construct($filePath)
     {
-        $this->pdfPath = $pdfPath; // chemin du fichier PDF
+        $this->filePath = $filePath;
     }
 
     public function via($notifiable)
@@ -27,13 +22,11 @@ class RapportArchivesNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Rapport des Archives')
-                    ->greeting('Bonjour Admin,')
-                    ->line('Veuillez trouver ci-joint le rapport PDF des recettes et dépenses archivées.')
-                    ->attach($this->pdfPath, [
-                        'as' => 'rapport_archives.pdf',
-                        'mime' => 'application/pdf',
-                    ])
-                    ->line('Merci pour votre gestion.');
+            ->subject('Votre Rapport Financier')
+            ->line('Veuillez trouver ci-joint le rapport financier des archives.')
+            ->attach(Storage::path($this->filePath), [
+                'as' => 'rapport_financier_archives.pdf', 
+                'mime' => 'application/pdf'
+            ]);
     }
 }

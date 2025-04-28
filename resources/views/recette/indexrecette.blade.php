@@ -43,7 +43,7 @@
                         <td>{{ $index + 1 }}</td>
                         <td>
                             <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#descriptionModal" data-description="{{ $recette->description }}">
-                                <i class="fas fa-eye"></i> Voir la description
+                                <i class="fas fa-eye"></i> 
                             </button>
                         </td>
                         <td>{{ $recette->objet }}</td>
@@ -54,14 +54,15 @@
                         <td>
                             <div class="d-flex gap-2">
                                 <a href="{{ route('recettes.show', $recette->id) }}" class="btn btn-info btn-sm" title="Voir">
-                                    <i class="fas fa-eye"></i> Voir
+                                    <i class="fas fa-eye"></i> 
                                 </a>
                                 <form action="{{ route('recette.archiver', $recette->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette recette ?')">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-archive"></i> Supprimer
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-archive"></i> 
                                     </button>
+                                    
                                 </form>
                             </div>
                         </td>
