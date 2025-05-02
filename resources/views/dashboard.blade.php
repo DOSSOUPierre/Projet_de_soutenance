@@ -102,7 +102,7 @@
                        <!-- 🔷 Menu Rapport Financier -->
 <li>
    <a href="{{ route('rapport.pdf') }}">
-       <i class="fa fa-bar-chart text-success"></i> Rapport Financier
+       <i class="fa fa-bar-chart text-success"></i> rapport.formulaire
    </a>
 </li>
 
@@ -211,6 +211,25 @@
                            <div class="page_title">
                               <h2>Plateforme de gestion financière et budgétaire d'entreprise</h2>
                            </div>
+                           <style>
+                              .page_title h2 {
+    white-space: nowrap; /* Pour empêcher le texte de se couper sur plusieurs lignes */
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    animation: defilement 10s linear infinite;
+}
+
+@keyframes defilement {
+    0% {
+        transform: translateX(100%); /* Début hors de l'écran à droite */
+    }
+    100% {
+        transform: translateX(-100%); /* Fin hors de l'écran à gauche */
+    }
+}
+
+                           </style>
                         </div>
                      </div>
                      <style>
@@ -413,84 +432,135 @@
                     </script>
                     
                     
-                     <div class="row column1 social_media_section">
-                        <div class="col-md-6 col-lg-3">
-                           <div class="full socile_icons fb margin_bottom_30">
-                              <div class="social_icon">
-                                 <i class="fa fa-facebook"></i>
-                              </div>
-                              <div class="social_cont">
-                                 <ul>
-                                    <li>
-                                       <span><strong>35k</strong></span>
-                                       <span>Friends</span>
-                                    </li>
-                                    <li>
-                                       <span><strong>128</strong></span>
-                                       <span>Feeds</span>
-                                    </li>
-                                 </ul>
-                              </div>
+                    <div class="row g-4 modern-stats">
+                     <!-- Croissance trimestrielle -->
+                     <div class="col-md-6 col-lg-4 col-xl-2">
+                       <div class="modern-card border-start border-info border-4 shadow-sm">
+                         <div class="card-body text-center">
+                           <div class="icon-circle bg-info text-white mb-3">
+                             <i class="fas fa-seedling"></i>
                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                           <div class="full socile_icons tw margin_bottom_30">
-                              <div class="social_icon">
-                                 <i class="fa fa-twitter"></i>
-                              </div>
-                              <div class="social_cont">
-                                 <ul>
-                                    <li>
-                                       <span><strong>584k</strong></span>
-                                       <span>Followers</span>
-                                    </li>
-                                    <li>
-                                       <span><strong>978</strong></span>
-                                       <span>Tweets</span>
-                                    </li>
-                                 </ul>
-                              </div>
+                           <div>
+                             <h6 class="card-title text-muted">Croissance trimestrielle</h6>
+                             <p class="card-value text-info fw-bold">+30.4%</p>
                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                           <div class="full socile_icons linked margin_bottom_30">
-                              <div class="social_icon">
-                                 <i class="fa fa-linkedin"></i>
-                              </div>
-                              <div class="social_cont">
-                                 <ul>
-                                    <li>
-                                       <span><strong>758+</strong></span>
-                                       <span>Contacts</span>
-                                    </li>
-                                    <li>
-                                       <span><strong>365</strong></span>
-                                       <span>Feeds</span>
-                                    </li>
-                                 </ul>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                           <div class="full socile_icons google_p margin_bottom_30">
-                              <div class="social_icon">
-                                 <i class="fa fa-google-plus"></i>
-                              </div>
-                              <div class="social_cont">
-                                 <ul>
-                                    <li>
-                                       <span><strong>450</strong></span>
-                                       <span>Followers</span>
-                                    </li>
-                                    <li>
-                                       <span><strong>57</strong></span>
-                                       <span>Circles</span>
-                                    </li>
-                                 </ul>
-                              </div>
-                           </div>
-                        </div>
+                         </div>
+                       </div>
                      </div>
+                   
+                     <!-- Trésorerie disponible -->
+                     <div class="col-md-6 col-lg-4 col-xl-2">
+                       <div class="modern-card border-start border-success border-4 shadow-sm">
+                         <div class="card-body text-center">
+                           <div class="icon-circle bg-success text-white mb-3">
+                             <i class="fas fa-wallet"></i>
+                           </div>
+                           <div>
+                             <h6 class="card-title text-muted">Trésorerie disponible</h6>
+                             <p class="card-value text-success fw-bold">84 560 (FCFA)</p>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   
+                     <!-- Projets en cours -->
+                     <div class="col-md-6 col-lg-4 col-xl-2">
+                       <div class="modern-card border-start border-warning border-4 shadow-sm">
+                         <div class="card-body text-center">
+                           <div class="icon-circle bg-warning text-white mb-3">
+                             <i class="fas fa-project-diagram"></i>
+                           </div>
+                           <div>
+                             <h6 class="card-title text-muted">Projets en cours</h6>
+                             <p class="card-value text-warning fw-bold">9</p>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   
+                     <!-- Incidents critiques -->
+                     <div class="col-md-6 col-lg-4 col-xl-2">
+                       <div class="modern-card border-start border-danger border-4 shadow-sm">
+                         <div class="card-body text-center">
+                           <div class="icon-circle bg-danger text-white mb-3">
+                             <i class="fas fa-bug"></i>
+                           </div>
+                           <div>
+                             <h6 class="card-title text-muted">Incidents critiques</h6>
+                             <p class="card-value text-danger fw-bold">2</p>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   
+                     <!-- Taux de rentabilité -->
+                     <div class="col-md-6 col-lg-4 col-xl-2">
+                       <div class="modern-card border-start border-primary border-4 shadow-sm">
+                         <div class="card-body text-center">
+                           <div class="icon-circle bg-primary text-white mb-3">
+                             <i class="fas fa-chart-line"></i>
+                           </div>
+                           <div>
+                             <h6 class="card-title text-muted">Taux de rentabilité</h6>
+                             <p class="card-value text-primary fw-bold">12.5%</p>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   
+                     <!-- Factures en attente -->
+                     <div class="col-md-6 col-lg-4 col-xl-2">
+                       <div class="modern-card border-start border-secondary border-4 shadow-sm">
+                         <div class="card-body text-center">
+                           <div class="icon-circle bg-secondary text-white mb-3">
+                             <i class="fas fa-file-invoice-dollar"></i>
+                           </div>
+                           <div>
+                             <h6 class="card-title text-muted">Factures en attente</h6>
+                             <p class="card-value text-secondary fw-bold">5</p>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                   
+                   <style>
+                     .modern-card {
+                       border-radius: 12px;
+                       background: #fff;
+                       transition: transform 0.2s ease;
+                       min-height: 160px;
+                     }
+                   
+                     .modern-card:hover {
+                       transform: translateY(-3px);
+                     }
+                   
+                     .icon-circle {
+                       width: 60px;
+                       height: 60px;
+                       border-radius: 50%;
+                       font-size: 24px;
+                       display: flex;
+                       align-items: center;
+                       justify-content: center;
+                       margin: 0 auto;
+                       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                     }
+                   
+                     .card-title {
+                       font-size: 14px;
+                       margin-top: 8px;
+                       text-transform: uppercase;
+                       letter-spacing: 0.5px;
+                     }
+                   
+                     .card-value {
+                       font-size: 20px;
+                       margin: 5px 0 0;
+                     }
+                   </style>
+                   
                      <!-- graph -->
                      {{-- <div class="row column2 graph margin_bottom_30">
                         <div class="col-md-l2 col-lg-12">

@@ -106,7 +106,7 @@
       <!-- JS injecte les blocs ici -->
     </div>
 
-    <a href="{{ route('login') }}" class="btn">Continuer</a>
+    <a href="{{ route('login') }}" class="btn">Accéder à la plateforme</a>
   </div>
 
   <script>

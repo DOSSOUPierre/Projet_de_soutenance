@@ -14,7 +14,19 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\VisualisationController;
 use App\Http\Controllers\RapportController;
 use App\Http\Controllers\RapportArchiveController;
+
 use App\Http\Controllers\DashboardController;
+
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+
+// ✅ Envoi du rapport
+Route::get('/envoyer-rapport', [RapportArchiveController::class, 'envoyerRapport'])->name('envoyer.rapport');
+Route::get('/archives/pdf', [RapportArchiveController::class, 'envoyerRapport'])->name('archives.pdf');
+
+// ✅ Formulaire création utilisateur
+Route::get('create-user-form', [UserAuthController::class, 'createUserForm'])->name('utilisateur.create');
+Route::post('create-user', [UserAuthController::class, 'store'])->name('utilisateur.store');
 
 // ✅ Page d’accueil
 Route::get('/', function () {
