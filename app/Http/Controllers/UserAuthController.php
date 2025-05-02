@@ -151,10 +151,11 @@ class UserAuthController extends Controller
 
     // Liste de tous les utilisateurs (admin)
     public function liste()
-    {
-        $users = User::all();  // Récupère tous les utilisateurs
+    { // $users = User::all();  // Récupère tous les utilisateurs
+        $users = User::latest()->paginate(10);;  // Récupère tous les utilisateurs
         return view('gestion.liste', compact('users'));
     }
+    
 
     // Affiche les détails d'un utilisateur spécifique
     public function show($id)

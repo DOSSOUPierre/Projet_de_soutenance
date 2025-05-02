@@ -65,20 +65,20 @@
         <!-- Sidebar -->
         <nav id="sidebar">
             <div class="sidebar_blog_1">
-                <div class="sidebar-header">
+                {{-- <div class="sidebar-header">
                     <div class="logo_section">
                         <a href="{{ route('dashboard') }}">
                             <img class="logo_icon img-responsive" src="{{ asset('images/logo/images.png') }}" alt="Logo" />
                         </a>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="sidebar_user_info">
                     <div class="icon_setting"></div>
                     <div class="user_profle_side">
-                        <div class="user_img">
+                        {{-- <div class="user_img">
                             <img class="img-responsive" src="{{ asset('images/layout_img/photo_identite_pierre.jpg') }}" alt="User Image" />
-                        </div>
+                        </div> --}}
                         <div class="user_info">
                             <h6><span class="name_user">{{ Auth::user()->name }}</span></h6>
                         </div>
@@ -130,16 +130,12 @@
 
                         <div class="right_topbar">
                             <div class="icon_info">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
-                                    <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
-                                </ul>
+                                
 
                                 <ul class="user_profile_dd">
                                     <li>
                                         <a class="dropdown-toggle" href="#">
-                                            <img class="img-responsive rounded-circle" src="{{ asset('images/layout_img/photo_identite_pierre.jpg') }}" alt="Profile Image" />
+                                            {{-- <img class="img-responsive rounded-circle" src="{{ asset('images/layout_img/photo_identite_pierre.jpg') }}" alt="Profile Image" /> --}}
                                             <span class="name_user">{{ Auth::user()->name }}</span>
                                         </a>
                                         <div class="dropdown-menu">

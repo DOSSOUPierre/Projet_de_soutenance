@@ -25,19 +25,25 @@ class CategorieDepenseController extends Controller
 
     // Enregistre une nouvelle catégorie
     public function store(Request $request)
-    {
-        // Validation des données
-        $request->validate([
-            'nom' => 'required|string|max:255|unique:categorie_depenses,nom', // Validation unique pour le nom
-            'description' => 'nullable|string|max:500', // Description facultative
-        ]);
+{
+    // Validation des données
+    $validatedData = $request->validate([
+        'nom' => 'required|string|max:255',
+    ]);
 
-        // Création de la catégorie
-        CategorieDepense::create($request->all());
-
-        // Redirige vers la liste des catégories avec un message de succès
-        return redirect()->route('categories.index')->with('success', 'Catégorie créée avec succès');
+    // Vérifier si la catégorie existe déjà
+    $existingCategory = CategorieDepense::where('nom', $request->nom)->first();
+    if ($existingCategory) {
+        return redirect()->route('categories.index')->with('error', 'Cette catégorie existe déjà.');
     }
+
+    // Création de la catégorie
+    CategorieDepense::create($request->all());
+
+    // Redirige vers la liste des catégories avec un message de succès
+    return redirect()->route('categories.index')->with('success', 'Catégorie créée avec succès');
+}
+
 
     // Affiche le formulaire d'édition
     public function edit(CategorieDepense $categorie)
@@ -46,19 +52,19 @@ class CategorieDepenseController extends Controller
     }
 
     // Met à jour une catégorie
-    public function update(Request $request, CategorieDepense $categorie)
+    public function update(Request $request, $id)
     {
-        // Validation des données (en ignorant l'ID actuel)
         $request->validate([
-            'nom' => 'required|string|max:255|unique:categorie_depenses,nom,' . $categorie->id, // Validation unique en ignorant l'ID actuel
-            'description' => 'nullable|string|max:500',
+            'nom' => 'required|string|max:255',
         ]);
-
-        // Mise à jour de la catégorie
-        $categorie->update($request->all());
-
-        return redirect()->route('categories.index')->with('success', 'Catégorie mise à jour avec succès');
+    
+        $categorie = CategorieDepense::findOrFail($id);
+        $categorie->nom = $request->nom;
+        $categorie->save();
+    
+        return redirect()->back()->with('success', 'Catégorie mise à jour avec succès.');
     }
+    
 
     // Supprime une catégorie
     public function destroy(CategorieDepense $categorie)
@@ -74,4 +80,5 @@ class CategorieDepenseController extends Controller
 
         return redirect()->route('categories.index')->with('success', 'Catégorie supprimée avec succès');
     }
+    
 }

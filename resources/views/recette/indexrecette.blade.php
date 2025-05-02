@@ -12,9 +12,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="fw-bold text-primary">Liste des Recettes</h2>
         <div>
-            <button class="btn btn-info me-2" data-bs-toggle="modal" data-bs-target="#ajouterCategorieModal">
-                <i class="fas fa-folder-plus me-1"></i> Ajouter une Catégorie
-            </button>
+        
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ajouterRecetteModal">
                 <i class="fas fa-plus me-2"></i> Ajouter une Recette
             </button> 
@@ -52,10 +50,10 @@
                         <td>{{ $recette->categorie->nom }}</td>
                         <td>{{ $recette->created_at->locale('fr')->isoFormat('dddd, D MMMM YYYY à HH:mm') }}</td>
                         <td>
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('recettes.show', $recette->id) }}" class="btn btn-info btn-sm" title="Voir">
+                            {{-- <div class="d-flex gap-2"> --}}
+                                {{-- <a href="{{ route('recettes.show', $recette->id) }}" class="btn btn-info btn-sm" title="Voir">
                                     <i class="fas fa-eye"></i> Voir
-                                </a>
+                                </a> --}}
                                 <form action="{{ route('recette.archiver', $recette->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette recette ?')">
                                     @csrf
                                     @method('PUT')
@@ -120,36 +118,6 @@
             </form>
         </div>
     </div>
-
-    <!-- MODAL AJOUT CATEGORIE -->
-    <div class="modal fade" id="ajouterCategorieModal" tabindex="-1" aria-labelledby="ajouterCategorieModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form method="POST" action="{{ route('categories_recette.create') }}">
-                @csrf
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Ajouter une Catégorie</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="nom">Nom de la Catégorie</label>
-                            <input type="text" name="nom" id="nom" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description">Description de la Catégorie</label>
-                            <input type="text" name="description" id="description" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-info">Ajouter</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- MODAL DESCRIPTION -->
     <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">

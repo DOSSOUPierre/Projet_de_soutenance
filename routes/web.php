@@ -64,16 +64,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/categories/{categorie}', [CategorieDepenseController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{categorie}', [CategorieDepenseController::class, 'destroy'])->name('categories.destroy');
     Route::post('/depense/categories/check-nom', [CategorieDepenseController::class, 'checkNom'])->name('categories.checkNom');
+    Route::get('/categories/{id}/edit', [CategorieDepenseController::class, 'edit'])->name('categories.edit');
+
 
     // ✅ Routes Catégories Recettes
     Route::get('/categories-recette', [CategorieRecetteController::class, 'index'])->name('categories_recette.index');
-    Route::post('/recette/categories/create', [CategorieRecetteController::class, 'create'])->name('categories_recette.create');
-    Route::post('/recette/categories', [CategorieRecetteController::class, 'store'])->name('categories_recette.store');
-    Route::get('/recette/categories/{id}', [CategorieRecetteController::class, 'show'])->name('categories_recette.show');
-    Route::get('/recette/categories/{id}/edit', [CategorieRecetteController::class, 'edit'])->name('categories_recette.edit');
-    Route::put('/recette/categories/{id}', [CategorieRecetteController::class, 'update'])->name('categories_recette.update');
-    Route::delete('/recette/categories/{id}', [CategorieRecetteController::class, 'destroy'])->name('categories_recette.destroy');
-
+Route::get('/recette/categories/create', [CategorieRecetteController::class, 'create'])->name('categories_recette.create');
+Route::post('/recette/categories', [CategorieRecetteController::class, 'store'])->name('categories_recette.store');
+Route::get('/recette/categories/{categorie}', [CategorieRecetteController::class, 'show'])->name('categories_recette.show');
+Route::get('/recette/categories/{categorie}/edit', [CategorieRecetteController::class, 'edit'])->name('categories_recette.edit');
+Route::put('/recette/categories/{categorie}', [CategorieRecetteController::class, 'update'])->name('categories_recette.update');  // Méthode PUT
+Route::delete('/recette/categories/{categorie}', [CategorieRecetteController::class, 'destroy'])->name('categories_recette.destroy');
     // ✅ Visualisation
     Route::get('/visualisation', [VisualisationController::class, 'visualiser'])->name('visualisation');
 });

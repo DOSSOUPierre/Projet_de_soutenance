@@ -12,7 +12,6 @@ class CreateCategoriesRecettesTable extends Migration
         Schema::create('categories_recettes', function (Blueprint $table) {
             $table->id();
             $table->string('nom');  // Nom de la catégorie
-            $table->text('description')->nullable();  // Description facultative
             $table->timestamps();
         });
     }

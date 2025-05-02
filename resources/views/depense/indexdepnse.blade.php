@@ -46,7 +46,7 @@
                         <td>{{ $index + 1 }}</td>
                         <td>
                             <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#descriptionModal" data-description="{{ $depense->description }}">
-                                <i class="fas fa-eye"></i> Voir la description
+                                <i class="fas fa-eye"></i> 
                             </button>
                         </td>
                         <td>{{ $depense->objet }}</td>
@@ -55,15 +55,15 @@
                         <td>{{ $depense->categorieDepense ? $depense->categorieDepense->nom : 'Aucune catégorie' }}</td>
                         <td>{{ $depense->created_at->locale('fr')->isoFormat('dddd, D MMMM YYYY à HH:mm') }}</td>
                         <td>
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('depense.show', $depense->id) }}" class="btn btn-info btn-sm" title="Voir">
-                                    <i class="fas fa-eye"></i> Voir
-                                </a>
+                            {{-- <div class="d-flex gap-2"> --}}
+                                {{-- <a href="{{ route('depense.show', $depense->id) }}" class="btn btn-info btn-sm" title="Voir">
+                                    <i class="fas fa-eye"></i> 
+                                </a> --}}
                                 <form action="{{ route('depenses.archiver', $depense->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette dépense ?')">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-archive"></i> Supprimer
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-archive"></i> 
                                     </button>
                                 </form>
                             </div>

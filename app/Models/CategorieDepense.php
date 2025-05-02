@@ -10,8 +10,7 @@ class CategorieDepense extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nom', // Nom de la catégorie de dépense
-        'description' // Description de la catégorie (facultatif)
+        'nom' // Nom de la catégorie de dépense
     ];
 
     /**
@@ -22,4 +21,6 @@ class CategorieDepense extends Model
     {
         return $this->hasMany(Depense::class, 'categorie_id');
     }
+    
+    
 }

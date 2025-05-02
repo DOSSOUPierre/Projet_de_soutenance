@@ -13,7 +13,7 @@ class CategorieRecette extends Model
     protected $table = 'categorie_recettes';
 
     // Champs remplissables en masse
-    protected $fillable = ['nom', 'description'];
+    protected $fillable = ['nom'];
 
     // Définition de la relation : une catégorie a plusieurs recettes
     public function recettes()

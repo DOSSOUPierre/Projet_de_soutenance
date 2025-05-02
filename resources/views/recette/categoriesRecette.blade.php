@@ -2,9 +2,43 @@
 
 @section('contenu')
 <style>
+    .table {
+        border-collapse: collapse;
+    }
+
     .table th, .table td {
         vertical-align: middle;
-        padding: 0.75rem;
+        padding: 0.2rem 0.3rem; /* Réduction uniforme */
+        white-space: nowrap; /* Empêche le retour à la ligne */
+    }
+
+    /* Colonne Numéro */
+    .table th:nth-child(1),
+    .table td:nth-child(1) {
+        width: 40px;
+        text-align: center;
+    }
+
+    /* Colonne Nom */
+    .table th:nth-child(2),
+    .table td:nth-child(2) {
+        width: 180px;
+    }
+
+    /* Colonne Date de création */
+    .table th:nth-child(3),
+    .table td:nth-child(3) {
+        width: 200px;
+    }
+
+    /* Colonne Actions */
+    .table th:nth-child(4),
+    .table td:nth-child(4),
+    .table td.text-end,
+    .table th.text-end {
+        width: 120px;
+        text-align: right;
+        white-space: nowrap;
     }
 
     .btn i {
@@ -25,6 +59,9 @@
         <h2 class="text-success">
             <i class="fa fa-tags me-2"></i>Catégories de Recettes
         </h2>
+        <a href="{{ route('listeRecette') }}" class="btn btn-outline-primary btn-sm btn-nav">
+            <i class="fa fa-arrow-right"></i> Aller aux Recette
+        </a>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ajouterCategorieModal">
             <i class="fa fa-plus"></i> Nouvelle Catégorie
         </button>
@@ -44,7 +81,6 @@
                     <tr>
                         <th>#</th>
                         <th>Nom</th>
-                        <th>Description</th>
                         <th>Date de création</th>
                         <th class="text-end">Actions</th>
                     </tr>
@@ -54,33 +90,23 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $categorie->nom }}</td>
-                            <td>{{ $categorie->description }}</td>
-                            <td>{{ $categorie->created_at->locale('fr')->isoFormat('dddd, D MMMM YYYY à HH:mm')  }}</td>
+                            <td>{{ $categorie->created_at->locale('fr')->isoFormat('dddd D MMMM YYYY à HH:mm') }}</td>
                             <td class="text-end">
-                                
-                                <!-- Modifier -->
-                                <a href="javascript:void(0);" class="btn btn-warning btn-sm me-1" title="Modifier"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modifierCategorieModal"
-                                    data-id="{{ $categorie->id }}"
-                                    data-nom="{{ $categorie->nom }}"
-                                    data-description="{{ $categorie->description }}">
-                                    <i class="fa fa-edit"></i> Modifier
-                                </a>
-
-                                <!-- Supprimer -->
+                                <a href="{{ route('categories_recette.edit', $categorie->id) }}" class="btn btn-warning btn-sm me-1">
+                                    <i class="fa fa-edit"></i>
+                                </a>                                
                                 <form action="{{ route('categories_recette.destroy', $categorie->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Supprimer cette catégorie ?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" title="Supprimer">
-                                        <i class="fa fa-trash"></i> Supprimer
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> 
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center text-muted">Aucune catégorie trouvée.</td>
+                            <td colspan="4" class="text-center text-muted">Aucune catégorie trouvée.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -90,21 +116,19 @@
 </div>
 
 <!-- Modal Ajouter -->
-<div class="modal fade" id="ajouterCategorieModal" tabindex="-1" aria-labelledby="ajouterCategorieModalLabel" aria-hidden="true">
+<div class="modal fade" id="ajouterCategorieModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="{{ route('categories_recette.store') }}" method="POST">
                 @csrf
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nom" class="form-label">Nom</label>
-                        <input type="text" name="nom" id="nom" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea name="description" id="description" class="form-control" required></textarea>
-                    </div>
+                <div class="mb-3 p-3">
+                    <label for="nom" class="form-label">Nom</label>
+                    <input type="text" name="nom" class="form-control @error('nom') is-invalid @enderror" value="{{ old('nom') }}" required>
+                    @error('nom')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-success">Ajouter</button>
@@ -114,97 +138,13 @@
     </div>
 </div>
 
-<!-- Modal Voir -->
-<div class="modal fade" id="voirCategorieModal" tabindex="-1" aria-labelledby="voirCategorieModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Détails de la catégorie</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Nom:</strong> <span id="voirNom"></span></p>
-                <p><strong>Description:</strong> <span id="voirDescription"></span></p>
-                <p><strong>Date de création:</strong> <span id="voirDate"></span></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Modifier -->
-<div class="modal fade" id="modifierCategorieModal" tabindex="-1" aria-labelledby="modifierCategorieModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="modifierCategorieForm" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-header">
-                    <h5 class="modal-title">Modifier la catégorie</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="categorieId" name="id">
-                    <div class="mb-3">
-                        <label for="modifierNom" class="form-label">Nom</label>
-                        <input type="text" class="form-control" id="modifierNom" name="nom" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="modifierDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="modifierDescription" name="description" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-success">Modifier</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@endsection
-
-@push('scripts')
+@if ($errors->any())
 <script>
-    // Voir
-    var voirModal = document.getElementById('voirCategorieModal');
-    voirModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        document.getElementById('voirNom').textContent = button.getAttribute('data-nom');
-        document.getElementById('voirDescription').textContent = button.getAttribute('data-description');
-        document.getElementById('voirDate').textContent = button.getAttribute('data-date');
-    });
-
-    // Modifier
-    var modifierModal = document.getElementById('modifierCategorieModal');
-    modifierModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var id = button.getAttribute('data-id');
-        document.getElementById('modifierCategorieForm').action = '/categories_recette/' + id;
-        document.getElementById('modifierNom').value = button.getAttribute('data-nom');
-        document.getElementById('modifierDescription').value = button.getAttribute('data-description');
-    });
-
-    // Soumission AJAX
-    $('#modifierCategorieForm').on('submit', function (e) {
-        e.preventDefault();
-        var form = $(this);
-        $.ajax({
-            url: form.attr('action'),
-            method: 'POST',
-            data: form.serialize(),
-            success: function (response) {
-                alert(response.success || 'Catégorie mise à jour avec succès.');
-                $('#modifierCategorieModal').modal('hide');
-                location.reload();
-            },
-            error: function () {
-                alert('Erreur lors de la mise à jour.');
-            }
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('ajouterCategorieModal'));
+        modal.show();
     });
 </script>
-@endpush
+@endif
+
+@endsection

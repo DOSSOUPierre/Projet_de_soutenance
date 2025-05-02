@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('categorie_depenses', function (Blueprint $table) {
             $table->id();
             $table->string('nom')->unique();
-            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

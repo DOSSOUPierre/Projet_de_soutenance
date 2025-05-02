@@ -11,7 +11,7 @@
         </div>
         <div class="card-body">
             <p><strong>Montant :</strong> {{ $depense->montant }} FCFA</p>
-            <p><strong>Catégorie :</strong> {{ $depense->categorie->nom }}</p>
+            <p><strong>Catégorie :</strong> {{ $depense->categorieDepense ? $depense->categorieDepense->nom : 'Pas de catégorie' }}</p>
             <p><strong>Description :</strong> {{ $depense->description }}</p>
             <p><strong>Objet :</strong> {{ $depense->objet }}</p>
             <p><strong>Téléphone :</strong> {{ $depense->telephone }}</p>

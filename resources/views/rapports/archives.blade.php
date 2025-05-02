@@ -132,7 +132,7 @@
                         <td>{{ $depense->description }}</td>
                         <td>{{ $depense->objet }}</td>
                         <td>{{ number_format($depense->montant, 2, ',', ' ') }} FCFA</td>
-                        <td>{{ $depense->categorie->nom }}</td>
+                        <td>{{ $depense->categorie ? $depense->categorie->nom : 'Aucune catégorie' }}</td>
                         <td>{{ $depense->created_at->format('d/m/Y') }}</td>
                     </tr>
                 @endforeach

@@ -46,20 +46,12 @@ class RecetteController extends Controller
     // Enregistre une nouvelle recette
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'description' => 'required|string|max:255',
-            'objet' => 'required|string|max:255',
-            'montant' => 'required|numeric|min:0',
-            'telephone' => 'nullable|string|max:20',
-            'categorie_id' => 'required|exists:categorie_recettes,id',
-            'archiver' => 'nullable|boolean',
-        ]);
-
+        $validated = $this->validateRecette($request);
         $validated['archiver'] = $request->has('archiver');
 
         $recette = Recette::create($validated);
 
-        // Notifie l'administrateur s'il existe
+        // Notifie un admin s'il existe
         $admin = User::where('type', 'admin')->first();
         if ($admin) {
             $admin->notify(new RecetteEnregistreeNotification($recette));
@@ -80,15 +72,7 @@ class RecetteController extends Controller
     // Met à jour une recette
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'description' => 'required|string|max:255',
-            'objet' => 'required|string|max:255',
-            'montant' => 'required|numeric|min:0',
-            'telephone' => 'nullable|string|max:20',
-            'categorie_id' => 'required|exists:categorie_recettes,id',
-            'archiver' => 'nullable|boolean',
-        ]);
-
+        $validated = $this->validateRecette($request);
         $validated['archiver'] = $request->has('archiver');
 
         $recette = Recette::findOrFail($id);
@@ -101,19 +85,19 @@ class RecetteController extends Controller
     public function destroy($id)
     {
         $recette = Recette::findOrFail($id);
-        $recette->delete();
+        $recette->delete(); // SoftDelete recommandé (voir modèle)
 
         return redirect()->route('recettes.archivees')->with('success', 'Recette supprimée avec succès.');
     }
 
-    // Archive une recette
+    // Archive ou restaure une recette (toggle)
     public function archiver($id)
     {
         $recette = Recette::findOrFail($id);
-        $recette->archiver = true;
+        $recette->archiver = !$recette->archiver;
         $recette->save();
 
-        return redirect()->route('listeRecette')->with('success', 'Recette archivée avec succès.');
+        return redirect()->route('listeRecette')->with('success', $recette->archiver ? 'Recette archivée.' : 'Recette restaurée.');
     }
 
     // Affiche les détails d’une recette
@@ -161,7 +145,24 @@ class RecetteController extends Controller
         }
 
         $resultats = $recettes->get();
+        $categories = CategorieRecette::all();
 
-        return view('recette.resultats', compact('resultats'));
+        return view('recette.indexrecette', [
+            'recettes' => $resultats,
+            'categories' => $categories,
+        ]);
+    }
+
+    // Validation centralisée
+    private function validateRecette(Request $request)
+    {
+        return $request->validate([
+            'description' => 'required|string|max:255',
+            'objet' => 'required|string|max:255',
+            'montant' => 'required|numeric|min:0',
+            'telephone' => 'nullable|string|max:20',
+            'categorie_id' => 'required|exists:categorie_recettes,id',
+            'archiver' => 'nullable|boolean',
+        ]);
     }
 }

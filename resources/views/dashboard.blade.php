@@ -52,14 +52,14 @@
             <nav id="sidebar">
                <div class="sidebar_blog_1">
                   <div class="sidebar-header">
-                     <div class="logo_section">
+                     {{-- <div class="logo_section">
                         <a href="index-2.html"><img class="logo_icon img-responsive" src="images/logo/images.png" alt="#" /></a>
-                     </div>
+                     </div> --}}
                   </div>
                   <div class="sidebar_user_info">
                      <div class="icon_setting"></div>
                      <div class="user_profle_side">
-                        <div class="user_img"><img class="img-responsive" src="images/layout_img/potho_d'identiée_dossou_pierre.jpg" alt="#" /></div>
+                        {{-- <div class="user_img"><img class="img-responsive" src="images/layout_img/potho_d'identiée_dossou_pierre.jpg" alt="#" /></div> --}}
                         <div class="user_info">
                            <h6><span class="name_user">{{ Auth::user()->name }}</span></h6>
                            {{-- <p><span class="online_animation"></span> Online</p> --}}
@@ -164,20 +164,20 @@
                      <div class="full">
                         <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
                         <div class="logo_section">
-                           <a href="index-2.html"><img class="img-responsive" src="images/logo/logos.jpg" alt="#" /></a>
+                           {{-- <a href="index-2.html"><img class="img-responsive" src="images/logo/logos.jpg" alt="#" /></a> --}}
                         </div>
                         <div class="right_topbar">
                            <div class="icon_info">
-                              <ul>
+                              {{-- <ul>
                                  <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
                                  <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
                                  <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
-                              </ul>
+                              </ul> --}}
                               <ul class="user_profile_dd">
                                  <li>
                                     
                                      <a class="dropdown-toggle" data-toggle="dropdown">
-                                         <img class="img-responsive rounded-circle" src="images/layout_img/potho_d'identiée_dossou_pierre.jpg" alt="Profile Image" />
+                                         {{-- <img class="img-responsive rounded-circle" src="images/layout_img/potho_d'identiée_dossou_pierre.jpg" alt="Profile Image" /> --}}
                                          <span class="name_user">{{ Auth::user()->name }}</span>
                                      </a>
                                      <div class="dropdown-menu">
